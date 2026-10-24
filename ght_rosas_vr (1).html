@@ -1,136 +1,665 @@
 <!doctype html>
 <html lang="es">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>GHT | Entrenamiento VR · Corte de rosas Freedom</title>
 <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
 <style>
 :root{--green:#153d2d;--mint:#d8f1e3;--cream:#f7f5ef;--red:#b72c3b}
-*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#172b23;color:#fff}
-#hud{position:fixed;z-index:5;left:16px;top:16px;width:min(350px,calc(100vw - 32px));background:rgba(15,38,29,.91);border:1px solid #ffffff30;border-radius:16px;padding:16px;backdrop-filter:blur(10px)}
-.brand{font-size:11px;letter-spacing:2px;color:#bce7c9;font-weight:800}h1{font-size:19px;margin:5px 0 8px}p{font-size:13px;line-height:1.45;margin:6px 0;color:#e4eee7}
-#status{color:#bce7c9;font-weight:700;font-size:12px;margin-top:10px}
-#progress{height:5px;background:#ffffff24;border-radius:9px;overflow:hidden;margin:8px 0}#bar{height:100%;width:0;background:#a8e2b8;transition:width .3s}
-button{border:0;border-radius:10px;padding:10px 12px;font-weight:750;cursor:pointer;font-size:13px}
-.primary{background:#d8f1e3;color:#153d2d}.secondary{background:#ffffff18;color:#fff;border:1px solid #ffffff35}
-.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.actions button{flex:1}
-#card{position:fixed;z-index:6;right:16px;top:16px;width:min(320px,calc(100vw - 32px));background:rgba(247,245,239,.96);color:#173c2d;border-radius:16px;padding:16px;display:none;box-shadow:0 12px 40px #0003}
-#card h2{font-size:18px;margin:3px 0 8px}#card p{color:#2e473b}#card .actions button{min-width:100px}
-#intro{position:fixed;inset:0;z-index:10;background:linear-gradient(120deg,rgba(12,35,25,.95),rgba(17,55,37,.82));display:flex;align-items:center;justify-content:center;padding:20px}
-.introbox{width:min(560px,100%);background:#f7f5ef;color:#153d2d;border-radius:22px;padding:26px;box-shadow:0 20px 80px #0005}
-.introbox h1{font-size:clamp(25px,4vw,36px);line-height:1.1}.introbox p{color:#385447;font-size:14px}.pill{display:inline-block;background:#e1eee4;padding:6px 9px;border-radius:20px;font-size:11px;font-weight:800;margin:3px}
-#reticle{position:fixed;z-index:4;left:50%;top:50%;width:8px;height:8px;border:2px solid white;border-radius:50%;transform:translate(-50%,-50%);pointer-events:none;box-shadow:0 0 4px #000}
-#hint{position:fixed;z-index:4;bottom:18px;left:50%;transform:translateX(-50%);background:#10291fd9;padding:9px 14px;border-radius:20px;font-size:12px;white-space:nowrap;max-width:90vw;text-align:center}
-@media(max-width:600px){#hud{top:8px;left:8px;padding:12px;width:calc(100vw - 16px)}#hud p{font-size:12px}#card{top:auto;bottom:54px;right:8px;width:calc(100vw - 16px)}}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:#12251c;color:#fff}
+#hud{position:fixed;z-index:5;left:18px;top:18px;width:min(365px,calc(100vw - 36px));background:linear-gradient(145deg,rgba(12,36,26,.97),rgba(19,56,38,.94));border:1px solid #e8fff02e;border-radius:19px;padding:18px;backdrop-filter:blur(14px);box-shadow:0 20px 60px #06130d70}
+.brand{font-size:10px;letter-spacing:2px;color:#bce7c9;font-weight:850}
+h1{font-size:21px;letter-spacing:-.3px;margin:7px 0 8px}
+p{font-size:13px;line-height:1.5;margin:6px 0;color:#dce9df}
+#status{color:#c3ebce;font-weight:750;font-size:12px;margin-top:10px}
+#progress{height:6px;background:#ffffff24;border-radius:9px;overflow:hidden;margin:10px 0}
+#bar{height:100%;width:0;background:linear-gradient(90deg,#64b57a,#d8f1e3);transition:width .3s}
+button{border:0;border-radius:10px;padding:10px 12px;font-weight:800;cursor:pointer;font-size:12px;transition:filter .16s,transform .16s}
+button:hover{filter:brightness(1.06);transform:translateY(-1px)}
+.primary{background:#d8f1e3;color:#153d2d}
+.secondary{background:#ffffff16;color:#fff;border:1px solid #ffffff3d}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.actions button{flex:1}
+#card{position:fixed;z-index:6;right:18px;top:18px;width:min(365px,calc(100vw - 36px));background:rgba(247,245,239,.97);color:#173c2d;border:1px solid #244b34;border-radius:20px;padding:17px;display:none;box-shadow:0 20px 60px #06130d70}
+#card h2{font-size:20px;letter-spacing:-.3px;margin:4px 0 8px}
+#card p{font-size:12px;line-height:1.5;color:#2e473b}
+#photoReference{display:block;width:100%;height:170px;object-fit:cover;border-radius:12px;margin:9px 0;background:#e6e8dc}
+#intro{position:fixed;inset:0;z-index:10;background:radial-gradient(ellipse at 70% 25%,#4a7d55bd,#0a2018f5 70%);display:flex;align-items:center;justify-content:center;padding:18px;backdrop-filter:blur(8px)}
+.introbox{width:min(650px,100%);max-height:92vh;overflow:auto;background:#f7f5ef;color:#153d2d;border:1px solid #315a42;border-radius:23px;padding:clamp(22px,5vw,36px);box-shadow:0 28px 95px #0008}
+.introbox h1{font-size:clamp(27px,5vw,43px);line-height:1.02;letter-spacing:-1px}
+.introbox p{color:#385447;font-size:13px;line-height:1.55}
+.pill{display:inline-block;background:#e1eee4;padding:7px 10px;border-radius:20px;font-size:10px;font-weight:800;margin:3px}
+#reticle{position:fixed;z-index:4;left:50%;top:50%;width:10px;height:10px;border:1.5px solid white;border-radius:50%;transform:translate(-50%,-50%);pointer-events:none;box-shadow:0 0 8px #000}
+#hint{position:fixed;z-index:4;bottom:18px;left:50%;transform:translateX(-50%);background:#0c261ee8;border:1px solid #ffffff30;padding:10px 15px;border-radius:20px;font-size:11px;white-space:nowrap;max-width:90vw;text-align:center}
+.caseGallery{position:fixed;z-index:20;inset:0;display:none;place-items:center;padding:18px;background:#08180edc;backdrop-filter:blur(8px)}
+.caseGalleryBox{width:min(900px,100%);max-height:90vh;overflow:auto;background:#f7f5ef;color:#153d2d;border-radius:20px;padding:20px}
+.caseGalleryBox header{display:flex;justify-content:space-between;align-items:center}
+.caseGalleryBox p{color:#4a6051;font-size:13px;line-height:1.55}
+.caseGalleryGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px}
+.caseGalleryGrid figure{margin:0;background:#e9eee7;border-radius:13px;padding:8px}
+.caseGalleryGrid img{width:100%;height:190px;object-fit:cover;border-radius:11px}
+.caseGalleryGrid figcaption{font-size:11px;font-weight:700;padding:6px 2px}
+@media(max-width:600px){
+ #hud{left:9px;top:9px;padding:13px;width:calc(100vw - 18px)}
+ #hud h1{font-size:18px}
+ #card{left:9px;right:9px;top:auto;bottom:50px;width:auto;padding:13px}
+ #photoReference{height:125px}
+ .introbox{padding:20px}
+ #hint{font-size:9px}
+}
 </style>
 </head>
 <body>
+
 <div id="hud">
- <div class="brand">GHT · GROWERS HUB TRADING</div><h1>Entrenamiento de corte · Freedom</h1>
- <p id="mission">Explora el cultivo y selecciona una rosa para observarla.</p>
- <div id="progress"><div id="bar"></div></div>
- <div id="status">Casos resueltos: 0 de 3 · Puntuación: 0</div>
- <div class="actions"><button class="primary" id="startVR">Entrar en VR</button><button class="secondary" id="reset">Reiniciar</button></div>
+  <div class="brand">GHT · GROWERS HUB TRADING</div>
+  <h1>Entrenamiento de corte · Freedom</h1>
+  <p id="mission">Explora el cultivo y selecciona una rosa para observarla.</p>
+  <div id="progress"><div id="bar"></div></div>
+  <div id="status">Casos resueltos: 0 de 9 · Puntuación: 0</div>
+  <div class="actions">
+    <button class="primary" id="startVR">Entrar en VR</button>
+    <button class="secondary" id="reset">Reiniciar</button>
+    <button class="secondary" id="showGallery">Casos difíciles</button>
+  </div>
 </div>
+
 <div id="card">
- <div class="brand" style="color:#347451">ROSA SELECCIONADA</div><h2 id="flowerTitle">Estado de la flor</h2><p id="flowerDesc"></p>
- <p id="flowerRule"></p><div class="actions" id="answers"></div>
- <div class="actions"><button class="secondary" id="closeCard" style="color:#153d2d;border-color:#153d2d33">Cerrar ficha</button></div>
+  <div class="brand" style="color:#347451">ROSA SELECCIONADA</div>
+  <h2 id="flowerTitle">Estado de la flor</h2>
+  <p id="flowerDesc"></p>
+  <img id="photoReference" alt="Foto real del banco técnico GHT">
+  <p id="flowerRule"></p>
+  <div class="actions" id="answers"></div>
+  <div class="actions">
+    <button class="secondary" id="closeCard" style="color:#153d2d;border-color:#153d2d33">Cerrar ficha</button>
+  </div>
 </div>
-<div id="intro"><div class="introbox">
- <div class="brand" style="color:#347451">GHT · CAPACITACIÓN INMERSIVA</div>
- <h1>Aprende a reconocer el punto de corte</h1>
- <p>Recorre un invernadero de rosas Freedom y practica tres decisiones: botón cerrado, punto óptimo y flor sobreabierta.</p>
- <span class="pill">Meta Quest · WebXR</span><span class="pill">Controladores o ratón</span><span class="pill">3 casos guiados</span>
- <p><b>Cómo jugar:</b> mira una flor y pulsa el gatillo del control, o haz clic sobre ella. En computador puedes moverte con WASD y mirar arrastrando el ratón.</p>
- <p><b>Criterio documentado GHT:</b> el punto 3 presenta el “caracol” definido mostrando centro, pétalos de rojo vivo e intenso y patrón de copa. El punto 2 cerrado tiene cabeza más pequeña, rojo más oscuro y sépalos más pegados a los pétalos.</p>
- <p style="font-size:12px">La flor sobreabierta se usa como caso de práctica visual; el documento consultado no detalla un umbral técnico para esa etapa. Validar el criterio con el equipo agronómico GHT antes de usarlo como estándar productivo.</p>
- <button class="primary" id="begin" style="width:100%;margin-top:8px;padding:14px">Comenzar recorrido</button>
- </div></div>
-<div id="reticle"></div><div id="hint">Mira una rosa y selecciónala · WASD para caminar</div>
-<a-scene renderer="colorManagement:true; physicallyCorrectLights:true; antialias:true; powerPreference:high-performance" background="color: #c9e0d3" vr-mode-ui="enabled:false" webxr="optionalFeatures: local-floor, bounded-floor, hand-tracking" loading-screen="enabled:false">
- <a-assets>
-  <a-mixin id="leaf" geometry="primitive: sphere; radius: 0.12; segmentsWidth: 8; segmentsHeight: 6" material="color:#2d733e; roughness:0.9" scale="1.7 0.55 0.22"></a-mixin>
- </a-assets>
- <a-entity light="type: ambient; intensity:0.82; color:#f4fff4"></a-entity>
- <a-entity light="type: directional; intensity:1.05; color:#fff5df" position="-4 8 3"></a-entity>
- <a-plane rotation="-90 0 0" width="34" height="44" color="#745d42" material="roughness:1"></a-plane>
- <!-- Beds and greenhouse structure -->
- <a-entity id="structure"></a-entity><a-entity id="plants"></a-entity>
- <a-entity id="cameraRig" position="0 0 7">
-  <a-camera id="camera" position="0 1.65 0" wasd-controls="acceleration:18" look-controls="pointerLockEnabled:true">
-   <a-cursor color="#f7fff9" fuse="false" raycaster="objects: .flower; far: 5" material="shader: flat; opacity:0.8"></a-cursor>
-  </a-camera>
-  <a-entity laser-controls="hand: right" raycaster="objects: .flower; far: 5" line="color:#d9f5e3; opacity:0.7"></a-entity>
-  <a-entity laser-controls="hand: left" raycaster="objects: .flower; far: 5" line="color:#d9f5e3; opacity:0.7"></a-entity>
- </a-entity>
+
+<div id="intro">
+  <div class="introbox">
+    <div class="brand" style="color:#347451">GHT · CAPACITACIÓN INMERSIVA</div>
+    <h1>Aprende a reconocer el punto de corte</h1>
+    <p>Recorre un invernadero tridimensional y practica decisiones con fotos del material de GHT. Recibirás retroalimentación después de responder y un resultado al terminar.</p>
+    <span class="pill">Meta Quest 3 · WebXR</span>
+    <span class="pill">Mando o mirada</span>
+    <span class="pill">9 flores de práctica</span>
+    <p><b>Quest 3:</b> joystick izquierdo para caminar, joystick derecho para girar, apunta con el láser y pulsa el gatillo para seleccionar. En computador usa WASD, ratón y clic.</p>
+    <p><b>Punto 3:</b> criterio escrito de GHT: caracol definido mostrando centro, pétalos de rojo vivo e intenso y patrón de copa. <b>Punto 2:</b> cabeza más pequeña, rojo más oscuro y sépalos más pegados a los pétalos.</p>
+    <p style="font-size:11px">La carpeta de sobreabierta se utiliza como ejemplo visual. El material consultado no indica un umbral técnico exacto para esa etapa; se debe validar con el equipo agronómico de GHT.</p>
+    <button class="primary" id="begin" style="width:100%;margin-top:8px;padding:14px">Comenzar recorrido</button>
+  </div>
+</div>
+
+<div id="caseGallery" class="caseGallery">
+  <section class="caseGalleryBox">
+    <header>
+      <div>
+        <div class="brand" style="color:#347451">MATERIAL DE REFERENCIA GHT</div>
+        <h2>Casos difíciles y ruido visual</h2>
+      </div>
+      <button class="secondary" id="closeGallery" style="color:#153d2d">Cerrar</button>
+    </header>
+    <p>Observa qué elemento dificulta leer la flor. El documento de GHT no establece una respuesta técnica individual para cada imagen, así que estos casos son de discusión y no llevan puntuación.</p>
+    <div class="caseGalleryGrid" id="caseGalleryGrid"></div>
+  </section>
+</div>
+
+<div id="reticle"></div>
+<div id="hint">Joystick izquierdo: caminar · joystick derecho: girar · gatillo: seleccionar</div>
+
+<a-scene
+  renderer="colorManagement:true; physicallyCorrectLights:true; antialias:true; powerPreference:high-performance"
+  background="color:#c9e0d3"
+  vr-mode-ui="enabled:false"
+  webxr="optionalFeatures: local-floor, bounded-floor, hand-tracking"
+  loading-screen="enabled:false">
+
+  <a-assets>
+    <a-mixin id="leaf"
+      geometry="primitive:sphere; radius:.12; segmentsWidth:8; segmentsHeight:6"
+      material="color:#2d733e; roughness:.9"
+      scale="1.7 .55 .22">
+    </a-mixin>
+  </a-assets>
+
+  <a-entity light="type:ambient; intensity:.82; color:#f4fff4"></a-entity>
+  <a-entity light="type:directional; intensity:1.05; color:#fff5df" position="-4 8 3"></a-entity>
+
+  <a-plane rotation="-90 0 0" width="34" height="44" color="#745d42" material="roughness:1"></a-plane>
+  <a-entity id="structure"></a-entity>
+  <a-entity id="plants"></a-entity>
+
+  <a-entity id="cameraRig" position="0 0 7">
+    <a-camera id="camera" position="0 1.65 0"
+      wasd-controls="acceleration:18"
+      look-controls="pointerLockEnabled:true">
+      <a-cursor color="#f7fff9" fuse="false"
+        raycaster="objects:.flower,.vrAnswer; far:7"
+        material="shader:flat; opacity:.8">
+      </a-cursor>
+    </a-camera>
+    <a-entity id="rightHand" laser-controls="hand:right"
+      raycaster="objects:.flower,.vrAnswer; far:7"
+      line="color:#d9f5e3; opacity:.7"></a-entity>
+    <a-entity id="leftHand" laser-controls="hand:left"
+      raycaster="objects:.flower,.vrAnswer; far:7"
+      line="color:#d9f5e3; opacity:.7"></a-entity>
+  </a-entity>
 </a-scene>
+
 <script>
-const scene=document.querySelector('a-scene'), structure=document.querySelector('#structure'), plants=document.querySelector('#plants');
+const scene=document.querySelector('a-scene');
+const structure=document.querySelector('#structure');
+const plants=document.querySelector('#plants');
 const cases=[
- {stage:'Punto 2 · Botón cerrado',desc:'La cabeza se ve más pequeña, el rojo es más oscuro y los sépalos están más pegados a los pétalos.',rule:'Criterio GHT: no cortar en punto 2.',decision:'dejar',feedback:'Correcto. No cortes: el material de GHT identifica el punto 2 cerrado como una falla frecuente de corte.'},
- {stage:'Punto 3 · Punto de corte',desc:'Busca el caracol definido mostrando el centro, pétalos de color vivo e intenso y forma de copa.',rule:'Criterio documentado GHT para Freedom.',decision:'cortar',feedback:'Correcto. El punto 3 se reconoce por el centro definido, el rojo vivo e intenso y el patrón de copa.'},
- {stage:'Flor sobreabierta',desc:'La flor aparece más abierta y extendida que la rosa de punto óptimo. Este es un caso comparativo de entrenamiento.',rule:'Umbral exacto de sobreapertura: pendiente de validar con GHT.',decision:'dejar',feedback:'En este ejercicio, no selecciones esta flor para corte. La regla visual de sobreapertura debe validarse con el protocolo agronómico GHT.'}
+  {stage:'Punto 2 · Botón cerrado',desc:'La cabeza se ve más pequeña, el rojo es más oscuro y los sépalos están más pegados a los pétalos.',rule:'Criterio GHT: no cortar en punto 2.',decision:'dejar',feedback:'El material de GHT identifica el punto 2 cerrado como una falla frecuente de corte.'},
+  {stage:'Punto 3 · Punto de corte',desc:'Busca el caracol definido mostrando el centro, pétalos de color vivo e intenso y forma de copa.',rule:'Criterio documentado GHT para Freedom.',decision:'cortar',feedback:'El punto 3 se reconoce por el centro definido, el rojo vivo e intenso y el patrón de copa.'},
+  {stage:'Flor sobreabierta',desc:'Compara la flor con los ejemplos visuales de sobreabierta incluidos por GHT.',rule:'Umbral exacto de sobreapertura: pendiente de validar con GHT.',decision:'dejar',feedback:'Este ejercicio usa el banco visual de GHT; valida la regla exacta con el protocolo agronómico.'}
 ];
-let resolved=new Set(),score=0,selected=null, started=false;
-function el(tag,attrs,parent){let e=document.createElement(tag);Object.entries(attrs||{}).forEach(([k,v])=>e.setAttribute(k,v));(parent||structure).appendChild(e);return e}
-function box(parent,x,y,z,w,h,d,color,extra={}){return el('a-box',{position:`${x} ${y} ${z}`,width:w,height:h,depth:d,color, ...extra},parent)}
-// Greenhouse posts, roof ribs, plastic roof and support wires
-for(let x=-7;x<=7;x+=3.5){el('a-cylinder',{position:`${x} 3.1 -7`,radius:.045,height:6.2,color:'#8a9d91'},structure);el('a-cylinder',{position:`${x} 3.1 14`,radius:.045,height:6.2,color:'#8a9d91'},structure);el('a-cylinder',{position:`${x} 6.1 3.5`,radius:.035,height:22,rotation:'90 0 0',color:'#a7b9ad'},structure)}
-for(let z=-7;z<=14;z+=4){el('a-cylinder',{position:`0 6.05 ${z}`,radius:.035,height:15,rotation:'0 0 90',color:'#a7b9ad'},structure)}
-el('a-plane',{position:'0 5.95 3.5',rotation:'90 0 0',width:15,height:22,color:'#eaf6ee',opacity:.16,transparent:true,side:'double',material:'roughness:0.3; metalness:0'},structure);
-for(let z=-6;z<14;z+=4){for(let x of [-5.2,-1.8,1.8,5.2]){box(structure,x,.18,z,1.3,.35,3.7,'#514b38',{material:'roughness:1'});for(let y=0.65;y<2.4;y+=.48){el('a-cylinder',{position:`${x} ${y} ${z}`,radius:.035,height:3.2,color:'#3e7c45'},plants);for(let j=0;j<5;j++){let side=j%2?1:-1, zz=z-.95+j*.46, yy=y+(j%3)*.08;el('a-entity',{position:`${x+side*.18} ${yy} ${zz}`,rotation:`0 ${side*28} ${side*22}`,mixin:'leaf'},plants)}}}}
-for(let y of [1.1,1.65,2.2]){el('a-cylinder',{position:`-5.2 ${y} 3.5`,rotation:'90 0 0',height:22,radius:.018,color:'#b6c7bc'},structure);el('a-cylinder',{position:`5.2 ${y} 3.5`,rotation:'90 0 0',height:22,radius:.018,color:'#b6c7bc'},structure)}
-function makeRose(x,z,type,id){
- let g=el('a-entity',{position:`${x} 0 ${z}`},plants);
- el('a-cylinder',{position:'0 1.25 0',radius:.035,height:2.5,color:'#2b713d'},g);
- for(let j=0;j<6;j++){let side=j%2?1:-1;el('a-entity',{position:`${side*.19} ${.72+j*.24} ${Math.sin(j)*.13}`,rotation:`0 ${j*65} ${side*28}`,mixin:'leaf'},g)}
- let top=el('a-entity',{position:'0 2.43 0',class:'flower', 'data-id':id},g);
- top.addEventListener('click',()=>selectFlower(id));
- top.addEventListener('raycaster-intersected',()=>{document.querySelector('#hint').textContent='Rosa detectada · pulsa gatillo o haz clic';});
- // sepals beneath bloom
- for(let i=0;i<5;i++){let a=i*72;el('a-entity',{position:`${Math.cos(a*Math.PI/180)*.11} -.04 ${Math.sin(a*Math.PI/180)*.11}`,rotation:`0 ${a} ${type===0?-20:25}`,geometry:'primitive: cone; radiusBottom:0.035; radiusTop:0.008; height:0.23',material:'color:#26723a; roughness:0.9'},top)}
- let petalCount=type===0?7:type===1?11:14, radius=type===0?.095:type===1?.16:.22;
- for(let i=0;i<petalCount;i++){
-  let a=i*137.5, r=radius*(type===0?.58:type===1?.68:1.05), y=type===0?i*.009:(type===1?Math.sin(i*1.3)*.025:Math.sin(i*1.2)*.09);
-  let p=el('a-sphere',{position:`${Math.cos(a*Math.PI/180)*r} ${y} ${Math.sin(a*Math.PI/180)*r}`,rotation:`${type===2?-25:15} ${a} ${type===2?Math.cos(a)*35:0}`,scale:type===0?'.095 .07 .06':(type===1?'.12 .085 .075':'.16 .075 .11'),color:type===0?'#741b29':(type===1?'#c71936':'#d6384d'),material:'roughness:0.7; metalness:0'},top);
- }
- // curled central spiral approximated by layered smaller petals
- for(let i=0;i<(type===0?3:5);i++)el('a-sphere',{position:`${Math.cos(i*2.4)*.035} ${.035+i*.012} ${Math.sin(i*2.4)*.035}`,scale:'.055 .05 .05',color:type===0?'#641525':'#a30f2b',material:'roughness:0.7'},top);
- top.setAttribute('geometry','primitive: sphere; radius: 0.3;');
- top.setAttribute('material','color:#ffffff; opacity:0.01; transparent:true');
- // add a subtle ring on interactable flowers
- el('a-torus',{position:'0 0.01 0',rotation:'90 0 0',radius:.28,radiusTubular:.008,color:'#f2dca1',material:'shader:flat; opacity:0.75'},top);
- top.dataset.case=type;
- return top;
-}
-let roseNodes={};
+
+let resolved=new Set();
+let score=0;
+let selected=null;
+let started=false;
+
+const ghtAsset='assets/ght-cases/';
+const photos={
+  bud1:'01_Inmaduro_No_Cortar_14.jpeg',
+  opt1:'02_Punto_Optimo_Corte_17.jpeg',
+  open1:'03_Pasado_Sobreabierto_13.jpeg',
+  opt2:'02_Punto_Optimo_Corte_2.jpeg',
+  bud2:'01_Inmaduro_No_Cortar_1.jpeg',
+  open2:'03_Pasado_Sobreabierto_58.jpeg',
+  open3:'03_Pasado_Sobreabierto_58.jpeg',
+  opt3:'02_Punto_Optimo_Corte_50.jpeg',
+  bud3:'01_Inmaduro_No_Cortar_60.jpeg'
+};
+
 const roseDefs=[
- [-3.9,-2,0,'bud1'],[-3.9,2,1,'opt1'],[-3.9,6,2,'open1'],
- [3.9,-3,1,'opt2'],[3.9,1,0,'bud2'],[3.9,5,2,'open2'],
- [-3.9,10,2,'open3'],[3.9,10,1,'opt3'],[0,-4,0,'bud3']
+  [-3.9,-2,0,'bud1'],
+  [-3.9, 2,1,'opt1'],
+  [-3.9, 6,2,'open1'],
+  [ 3.9,-3,1,'opt2'],
+  [ 3.9, 1,0,'bud2'],
+  [ 3.9, 5,2,'open2'],
+  [-3.9,10,2,'open3'],
+  [ 3.9,10,1,'opt3'],
+  [ 0,  -4,0,'bud3']
 ];
-roseDefs.forEach(([x,z,t,id])=>roseNodes[id]=makeRose(x,z,t,id));
-function selectFlower(id){if(!started)return;selected=id;let def=roseDefs.find(r=>r[3]===id),c=cases[def[2]];
- document.querySelector('#flowerTitle').textContent=c.stage;document.querySelector('#flowerDesc').textContent=c.desc;document.querySelector('#flowerRule').textContent=c.rule;
- let ans=document.querySelector('#answers');ans.innerHTML='';
- [['✂ Cortar','cortar'],['Dejar la flor','dejar']].forEach(([label,val])=>{let b=document.createElement('button');b.textContent=label;b.className=val==='cortar'?'primary':'secondary';if(val==='dejar'){b.style.color='#153d2d';b.style.borderColor='#153d2d33'}b.onclick=()=>answer(id,val,def[2]);ans.appendChild(b)});
- document.querySelector('#card').style.display='block';
+
+function el(tag,attrs,parent){
+  const e=document.createElement(tag);
+  Object.entries(attrs||{}).forEach(([k,v])=>e.setAttribute(k,v));
+  (parent||structure).appendChild(e);
+  return e;
 }
-function answer(id,val,type){if(resolved.has(id)){document.querySelector('#flowerDesc').textContent='Ya respondiste este caso. '+cases[type].feedback;return}
- resolved.add(id);let correct=val===cases[type].decision;if(correct)score++;
- document.querySelector('#flowerDesc').textContent=(correct?'✓ Respuesta correcta. ':'✕ Respuesta incorrecta. ')+cases[type].feedback;
- document.querySelector('#flowerRule').textContent='Decisión del ejercicio: '+(cases[type].decision==='cortar'?'cortar':'dejar la flor')+'.';
- document.querySelector('#answers').innerHTML='';let b=document.createElement('button');b.className='primary';b.textContent='Continuar';b.onclick=()=>{document.querySelector('#card').style.display='none';updateHUD();if(resolved.size>=3)finish()};document.querySelector('#answers').appendChild(b);updateHUD();
+
+function box(parent,x,y,z,w,h,d,color){
+  return el('a-box',{
+    position:x+' '+y+' '+z,
+    width:w,height:h,depth:d,color,
+    material:'roughness:1'
+  },parent);
 }
-function updateHUD(){document.querySelector('#status').textContent=`Casos resueltos: ${Math.min(resolved.size,3)} de 3 · Puntuación: ${score}`;document.querySelector('#bar').style.width=`${Math.min(resolved.size,3)/3*100}%`;document.querySelector('#mission').textContent=resolved.size>=3?'Entrenamiento completado. Revisa los resultados.':'Explora el cultivo y selecciona una rosa para observarla.'}
-function finish(){document.querySelector('#card').style.display='block';document.querySelector('#flowerTitle').textContent='Entrenamiento finalizado';document.querySelector('#flowerDesc').textContent=`Resultado: ${score} de 3 decisiones correctas. ${score===3?'Buen reconocimiento de los casos de práctica.':'Repite el recorrido y revisa las pistas visuales antes de decidir.'}`;document.querySelector('#flowerRule').textContent='Recuerda: el criterio documentado para Freedom es el punto 3: caracol definido con centro visible, pétalos rojo vivo e intenso y patrón de copa.';document.querySelector('#answers').innerHTML='';let b=document.createElement('button');b.className='primary';b.textContent='Volver a practicar';b.onclick=reset;b.style.color='#153d2d';document.querySelector('#answers').appendChild(b)}
-function reset(){resolved.clear();score=0;selected=null;updateHUD();document.querySelector('#card').style.display='none';document.querySelector('#intro').style.display='none';started=true;document.querySelector('#mission').textContent='Busca las flores señaladas y decide si están listas para corte.'}
-document.querySelector('#begin').onclick=()=>{started=true;document.querySelector('#intro').style.display='none';document.querySelector('#hint').textContent='Mira una rosa y pulsa gatillo/clic · WASD para caminar'};
-document.querySelector('#startVR').onclick=()=>{if(scene.enterVR)scene.enterVR()};
-document.querySelector('#reset').onclick=reset;document.querySelector('#closeCard').onclick=()=>document.querySelector('#card').style.display='none';
-document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelector('#card').style.display='none'});
-// Controller trigger support: A-Frame raycaster click usually dispatches click; explicitly map trigger events.
-document.querySelectorAll('[laser-controls]').forEach(hand=>{hand.addEventListener('triggerdown',()=>{let els=hand.components.raycaster&&hand.components.raycaster.intersectedEls;if(els&&els.length){let node=els[0].closest('.flower');if(node)selectFlower(node.dataset.id)}})});
+
+// Invernadero: postes, vigas, plástico translúcido, camas y alambres.
+for(let x=-7;x<=7;x+=3.5){
+  el('a-cylinder',{position:x+' 3.1 -7',radius:.045,height:6.2,color:'#8a9d91'},structure);
+  el('a-cylinder',{position:x+' 3.1 14',radius:.045,height:6.2,color:'#8a9d91'},structure);
+  el('a-cylinder',{position:x+' 6.1 3.5',radius:.035,height:22,rotation:'90 0 0',color:'#a7b9ad'},structure);
+}
+for(let z=-7;z<=14;z+=4){
+  el('a-cylinder',{position:'0 6.05 '+z,radius:.035,height:15,rotation:'0 0 90',color:'#a7b9ad'},structure);
+}
+el('a-plane',{
+  position:'0 5.95 3.5',rotation:'90 0 0',width:15,height:22,
+  color:'#eaf6ee',opacity:.16,transparent:true,side:'double',
+  material:'roughness:.3; metalness:0'
+},structure);
+
+for(let z=-6;z<14;z+=4){
+  for(const x of [-5.2,-1.8,1.8,5.2]){
+    box(structure,x,.18,z,1.3,.35,3.7,'#514b38');
+    for(let y=.65;y<2.4;y+=.48){
+      el('a-cylinder',{position:x+' '+y+' '+z,radius:.035,height:3.2,color:'#3e7c45'},plants);
+      for(let j=0;j<5;j++){
+        const side=j%2?1:-1;
+        const zz=z-.95+j*.46;
+        const yy=y+(j%3)*.08;
+        el('a-entity',{
+          position:(x+side*.18)+' '+yy+' '+zz,
+          rotation:'0 '+(side*28)+' '+(side*22),
+          mixin:'leaf'
+        },plants);
+      }
+    }
+  }
+}
+for(const y of [1.1,1.65,2.2]){
+  el('a-cylinder',{position:'-5.2 '+y+' 3.5',rotation:'90 0 0',height:22,radius:.018,color:'#b6c7bc'},structure);
+  el('a-cylinder',{position:'5.2 '+y+' 3.5',rotation:'90 0 0',height:22,radius:.018,color:'#b6c7bc'},structure);
+}
+
+function makeRose(x,z,type,id){
+  const g=el('a-entity',{position:x+' 0 '+z},plants);
+  el('a-cylinder',{position:'0 1.25 0',radius:.035,height:2.5,color:'#2b713d'},g);
+  for(let j=0;j<6;j++){
+    const side=j%2?1:-1;
+    el('a-entity',{
+      position:(side*.19)+' '+(.72+j*.24)+' '+(Math.sin(j)*.13),
+      rotation:'0 '+(j*65)+' '+(side*28),
+      mixin:'leaf'
+    },g);
+  }
+  const top=el('a-entity',{
+    position:'0 2.43 0',
+    class:'flower',
+    'data-id':id||''
+  },g);
+
+  top.addEventListener('click',()=>selectFlower(id));
+  top.addEventListener('raycaster-intersected',()=>{
+    document.querySelector('#hint').textContent='Flor detectada · pulsa el gatillo para seleccionar';
+  });
+
+  for(let i=0;i<5;i++){
+    const a=i*72;
+    el('a-entity',{
+      position:(Math.cos(a*Math.PI/180)*.11)+' -.04 '+(Math.sin(a*Math.PI/180)*.11),
+      rotation:'0 '+a+' '+(type===0?-20:25),
+      geometry:'primitive:cone; radiusBottom:.035; radiusTop:.008; height:.23',
+      material:'color:#26723a; roughness:.9'
+    },top);
+  }
+
+  const petalCount=type===0?7:type===1?11:14;
+  const radius=type===0?.095:type===1?.16:.22;
+
+  for(let i=0;i<petalCount;i++){
+    const a=i*137.5;
+    const r=radius*(type===0?.58:type===1?.68:1.05);
+    const y=type===0?i*.009:(type===1?Math.sin(i*1.3)*.025:Math.sin(i*1.2)*.09);
+    const color=type===0?'#741b29':(type===1?'#c71936':'#d6384d');
+    el('a-sphere',{
+      position:(Math.cos(a*Math.PI/180)*r)+' '+y+' '+(Math.sin(a*Math.PI/180)*r),
+      rotation:(type===2?-25:15)+' '+a+' '+(type===2?Math.cos(a)*35:0),
+      scale:type===0?'.095 .07 .06':(type===1?'.12 .085 .075':'.16 .075 .11'),
+      color,
+      material:'roughness:.7; metalness:0'
+    },top);
+  }
+
+  for(let i=0;i<(type===0?3:5);i++){
+    el('a-sphere',{
+      position:Math.cos(i*2.4)*.035+' '+(.035+i*.012)+' '+Math.sin(i*2.4)*.035,
+      scale:'.055 .05 .05',
+      color:type===0?'#641525':'#a30f2b',
+      material:'roughness:.7'
+    },top);
+  }
+
+  top.setAttribute('geometry','primitive:sphere; radius:.3');
+  top.setAttribute('material','color:#fff; opacity:.01; transparent:true');
+  el('a-torus',{
+    position:'0 0.01 0',rotation:'90 0 0',radius:.28,radiusTubular:.008,
+    color:'#f2dca1',material:'shader:flat; opacity:.75'
+  },top);
+  top.dataset.case=type;
+  return top;
+}
+
+const roseNodes={};
+roseDefs.forEach(([x,z,type,id])=>roseNodes[id]=makeRose(x,z,type,id));
+
+function getRose(id){return roseDefs.find(r=>r[3]===id)}
+function getCase(id){const r=getRose(id);return r?cases[r[2]]:null}
+function isVR(){return scene.is('vr-mode')}
+
+function updateHUD(){
+  document.querySelector('#status').textContent=
+    'Casos resueltos: '+resolved.size+' de '+roseDefs.length+' · Puntuación: '+score;
+  document.querySelector('#bar').style.width=
+    (resolved.size/roseDefs.length*100)+'%';
+  document.querySelector('#mission').textContent=
+    resolved.size>=roseDefs.length?'Entrenamiento completado. Revisa el resultado.':
+    'Explora el cultivo y selecciona una rosa para observarla.';
+}
+
+function createVRPanel(){
+  if(document.querySelector('#trainingPanel'))return;
+  const camera=document.querySelector('#camera');
+  const panel=document.createElement('a-entity');
+  panel.id='trainingPanel';
+  panel.setAttribute('position','0 0 -1.65');
+  panel.setAttribute('visible','false');
+  camera.appendChild(panel);
+
+  const bg=document.createElement('a-plane');
+  bg.setAttribute('width','1.65');
+  bg.setAttribute('height','.94');
+  bg.setAttribute('material','color:#10291f;opacity:.97;shader:flat;side:double');
+  panel.appendChild(bg);
+
+  function text(id,value,position,width,color,scale){
+    const t=document.createElement('a-text');
+    t.id=id;
+    t.setAttribute('value',value);
+    t.setAttribute('position',position);
+    t.setAttribute('width',width);
+    t.setAttribute('color',color);
+    t.setAttribute('scale',scale+' '+scale+' '+scale);
+    t.setAttribute('wrap-count','34');
+    panel.appendChild(t);
+  }
+
+  text('vrTitle','','-.72 .36 .02',1.4,'#fff',.78);
+  text('vrDesc','','-.72 .12 .02',.78,'#dce9df',.60);
+
+  const img=document.createElement('a-image');
+  img.id='vrPhoto';
+  img.setAttribute('position','.48 .03 .02');
+  img.setAttribute('width','.38');
+  img.setAttribute('height','.52');
+  panel.appendChild(img);
+
+  text('vrRule','','-.72 -.23 .02',1.45,'#e5c98e',.53);
+
+  for(const item of [['CORTAR','cortar',-.36],['DEJAR','dejar',.36]]){
+    const b=document.createElement('a-plane');
+    b.classList.add('vrAnswer');
+    b.dataset.choice=item[1];
+    b.setAttribute('position',item[2]+' -.37 .03');
+    b.setAttribute('width','.60');
+    b.setAttribute('height','.18');
+    b.setAttribute('color','#d8f1e3');
+    b.setAttribute('material','shader:flat');
+    panel.appendChild(b);
+
+    const t=document.createElement('a-text');
+    t.setAttribute('value',item[0]);
+    t.setAttribute('position',(item[2]-.19)+' -.385 .04');
+    t.setAttribute('width','.42');
+    t.setAttribute('color','#173b2d');
+    t.setAttribute('scale','.58 .58 .58');
+    panel.appendChild(t);
+  }
+
+  const next=document.createElement('a-plane');
+  next.id='vrNext';
+  next.classList.add('vrAnswer');
+  next.dataset.choice='next';
+  next.setAttribute('position','0 -.37 .03');
+  next.setAttribute('width','.68');
+  next.setAttribute('height','.19');
+  next.setAttribute('color','#d8f1e3');
+  next.setAttribute('material','shader:flat');
+  next.setAttribute('visible','false');
+  panel.appendChild(next);
+
+  const nextText=document.createElement('a-text');
+  nextText.setAttribute('value','CONTINUAR');
+  nextText.setAttribute('position','-.19 -.385 .04');
+  nextText.setAttribute('width','.4');
+  nextText.setAttribute('color','#173b2d');
+  nextText.setAttribute('scale','.58 .58 .58');
+  nextText.setAttribute('visible','false');
+  panel.appendChild(nextText);
+
+  const restart=document.createElement('a-plane');
+  restart.id='vrRestart';
+  restart.classList.add('vrAnswer');
+  restart.dataset.choice='restart';
+  restart.setAttribute('position','0 -.37 .03');
+  restart.setAttribute('width','.68');
+  restart.setAttribute('height','.19');
+  restart.setAttribute('color','#d8f1e3');
+  restart.setAttribute('material','shader:flat');
+  restart.setAttribute('visible','false');
+  panel.appendChild(restart);
+
+  const restartText=document.createElement('a-text');
+  restartText.setAttribute('value','REINICIAR');
+  restartText.setAttribute('position','-.19 -.385 .04');
+  restartText.setAttribute('width','.4');
+  restartText.setAttribute('color','#173b2d');
+  restartText.setAttribute('scale','.58 .58 .58');
+  restartText.setAttribute('visible','false');
+  panel.appendChild(restartText);
+
+  for(const ray of document.querySelectorAll('[raycaster]')){
+    ray.setAttribute('raycaster','objects:.flower,.vrAnswer; far:7');
+  }
+}
+
+function showVRCase(id){
+  createVRPanel();
+  const row=getRose(id);
+  const c=getCase(id);
+  document.querySelector('#vrTitle').setAttribute('value',c.stage);
+  document.querySelector('#vrDesc').setAttribute('value',c.desc);
+  document.querySelector('#vrRule').setAttribute('value',c.rule);
+  document.querySelector('#vrPhoto').setAttribute('src',ghtAsset+photos[id]);
+  document.querySelector('#trainingPanel').setAttribute('visible',true);
+  document.querySelector('#vrNext').setAttribute('visible',false);
+  document.querySelector('#vrRestart').setAttribute('visible',false);
+  document.querySelectorAll('.vrAnswer[data-choice="cortar"],.vrAnswer[data-choice="dejar"]').forEach(e=>e.setAttribute('visible',true));
+}
+
+function selectFlower(id){
+  if(!started)return;
+  if(resolved.has(id))return;
+  selected=id;
+  const c=getCase(id);
+  if(isVR()){
+    showVRCase(id);
+    return;
+  }
+
+  document.querySelector('#flowerTitle').textContent=c.stage;
+  document.querySelector('#flowerDesc').textContent=c.desc;
+  document.querySelector('#flowerRule').textContent=c.rule;
+  document.querySelector('#photoReference').src=ghtAsset+photos[id];
+
+  const ans=document.querySelector('#answers');
+  ans.innerHTML='';
+  [['✂ Cortar','cortar'],['Dejar la flor','dejar']].forEach(([label,val])=>{
+    const b=document.createElement('button');
+    b.textContent=label;
+    b.className=val==='cortar'?'primary':'secondary';
+    b.onclick=()=>answer(id,val);
+    ans.appendChild(b);
+  });
+  document.querySelector('#card').style.display='block';
+}
+
+function answer(id,value){
+  if(!id||resolved.has(id))return;
+  const row=getRose(id);
+  const c=getCase(id);
+  const correct=value===c.decision;
+  resolved.add(id);
+  if(correct)score++;
+  updateHUD();
+
+  const flower=roseNodes[id];
+  if(value==='cortar'&&flower){
+    flower.setAttribute('animation__cutdrop','property:position; to:0 -0.28 0; dur:320; easing:easeInQuad');
+    flower.setAttribute('animation__cutfade','property:scale; to:.02 .02 .02; dur:260; delay:320; easing:easeInQuad');
+  }
+
+  const feedback=(correct?'✓ Correcto. ':'✕ Revisa el criterio. ')+c.feedback;
+
+  if(isVR()){
+    document.querySelector('#vrDesc').setAttribute('value',feedback);
+    document.querySelector('#vrRule').setAttribute('value',c.rule);
+    document.querySelectorAll('.vrAnswer[data-choice="cortar"],.vrAnswer[data-choice="dejar"]').forEach(e=>e.setAttribute('visible',false));
+    document.querySelector('#vrNext').setAttribute('visible',true);
+    document.querySelectorAll('#trainingPanel a-text').forEach(e=>{
+      if(e.getAttribute('value')==='CONTINUAR')e.setAttribute('visible',true);
+    });
+    return;
+  }
+
+  document.querySelector('#flowerDesc').textContent=feedback;
+  document.querySelector('#flowerRule').textContent=c.rule;
+  const ans=document.querySelector('#answers');
+  ans.innerHTML='';
+  const next=document.createElement('button');
+  next.className='primary';
+  next.textContent='Continuar';
+  next.onclick=()=>{
+    document.querySelector('#card').style.display='none';
+    if(resolved.size>=roseDefs.length)finish();
+  };
+  ans.appendChild(next);
+}
+
+function finish(){
+  const pct=Math.round(score/roseDefs.length*100);
+  document.querySelector('#mission').textContent='Entrenamiento finalizado';
+  document.querySelector('#flowerTitle').textContent='Resultado: '+score+' de '+roseDefs.length;
+  document.querySelector('#flowerDesc').textContent=
+    pct===100?'Excelente reconocimiento de los casos de práctica.':'Revisa la retroalimentación y vuelve a practicar.';
+  document.querySelector('#flowerRule').textContent=
+    'Punto 3: criterio escrito GHT. Sobreabierta: umbral exacto pendiente de validación.';
+  document.querySelector('#answers').innerHTML='';
+  const again=document.createElement('button');
+  again.className='primary';
+  again.textContent='Volver a practicar';
+  again.onclick=reset;
+  document.querySelector('#answers').appendChild(again);
+  document.querySelector('#card').style.display='block';
+
+  if(isVR()){
+    createVRPanel();
+    document.querySelector('#vrTitle').setAttribute('value','Resultado: '+score+' / '+roseDefs.length);
+    document.querySelector('#vrDesc').setAttribute('value','Entrenamiento terminado. Contrasta tus decisiones con la guía técnica de GHT.');
+    document.querySelector('#vrRule').setAttribute('value','Sobreabierta: el umbral exacto requiere validación agronómica.');
+    document.querySelectorAll('.vrAnswer').forEach(e=>e.setAttribute('visible',false));
+    document.querySelector('#vrRestart').setAttribute('visible',true);
+    document.querySelectorAll('#trainingPanel a-text').forEach(e=>{
+      if(e.getAttribute('value')==='REINICIAR')e.setAttribute('visible',true);
+    });
+    document.querySelector('#trainingPanel').setAttribute('visible',true);
+  }
+}
+
+function reset(){
+  resolved.clear();
+  score=0;
+  selected=null;
+  started=true;
+  document.querySelector('#card').style.display='none';
+  const panel=document.querySelector('#trainingPanel');
+  if(panel)panel.setAttribute('visible',false);
+  document.querySelector('#intro').style.display='none';
+  updateHUD();
+}
+
+document.querySelector('#begin').onclick=()=>{
+  started=true;
+  document.querySelector('#intro').style.display='none';
+};
+document.querySelector('#startVR').onclick=()=>{
+  if(!started){
+    started=true;
+    document.querySelector('#intro').style.display='none';
+  }
+  scene.enterVR();
+};
+document.querySelector('#reset').onclick=reset;
+document.querySelector('#closeCard').onclick=()=>document.querySelector('#card').style.display='none';
+document.querySelector('#showGallery').onclick=()=>document.querySelector('#caseGallery').style.display='grid';
+document.querySelector('#closeGallery').onclick=()=>document.querySelector('#caseGallery').style.display='none';
+
+const galleryFiles=['12','26','41','42','45','53','59','63'];
+const gallery=document.querySelector('#caseGalleryGrid');
+galleryFiles.forEach(n=>{
+  const fig=document.createElement('figure');
+  fig.innerHTML='<img src="'+ghtAsset+'04_Casos_Dificiles_Ruido_'+n+'.jpeg" alt="Caso difícil '+n+'"><figcaption>Caso difícil · '+n+' · observación</figcaption>';
+  gallery.appendChild(fig);
+});
+
+document.querySelectorAll('[laser-controls]').forEach(hand=>{
+  hand.addEventListener('triggerdown',()=>{
+    const hit=hand.components.raycaster&&hand.components.raycaster.intersectedEls[0];
+    if(!hit)return;
+
+    const flower=hit.closest('.flower');
+    if(flower&&flower.dataset.id){
+      selectFlower(flower.dataset.id);
+      return;
+    }
+
+    const button=hit.closest('.vrAnswer');
+    if(!button)return;
+
+    if(button.dataset.choice==='cortar')answer(selected,'cortar');
+    if(button.dataset.choice==='dejar')answer(selected,'dejar');
+    if(button.dataset.choice==='next'){
+      document.querySelector('#trainingPanel').setAttribute('visible',false);
+      if(resolved.size>=roseDefs.length)finish();
+    }
+    if(button.dataset.choice==='restart')reset();
+  });
+});
+
+// Joystick izquierdo: caminar. Joystick derecho: giro suave.
+AFRAME.registerComponent('quest-thumbstick-move',{
+  init:function(){
+    this.moveAxis={x:0,y:0};
+    this.turnAxis={x:0,y:0};
+
+    document.querySelector('#leftHand').addEventListener('thumbstickmoved',e=>{
+      this.moveAxis=e.detail||{x:0,y:0};
+    });
+    document.querySelector('#rightHand').addEventListener('thumbstickmoved',e=>{
+      this.turnAxis=e.detail||{x:0,y:0};
+    });
+  },
+  tick:function(time,dt){
+    if(!this.el.sceneEl.is('vr-mode')||!dt)return;
+
+    const delta=Math.min(dt,40)/1000;
+    const deadZone=.16;
+    const forward=new THREE.Vector3();
+    document.querySelector('#camera').object3D.getWorldDirection(forward);
+    forward.y=0;
+    forward.normalize();
+
+    const right=new THREE.Vector3(-forward.z,0,forward.x);
+    const x=Math.abs(this.moveAxis.x)>deadZone?this.moveAxis.x:0;
+    const y=Math.abs(this.moveAxis.y)>deadZone?this.moveAxis.y:0;
+    const turn=Math.abs(this.turnAxis.x)>deadZone?this.turnAxis.x:0;
+
+    this.el.object3D.rotation.y-=turn*1.35*delta;
+    this.el.object3D.position.addScaledVector(right,x*2.1*delta);
+    this.el.object3D.position.addScaledVector(forward,-y*2.1*delta);
+
+    this.el.object3D.position.x=THREE.MathUtils.clamp(this.el.object3D.position.x,-7,7);
+    this.el.object3D.position.z=THREE.MathUtils.clamp(this.el.object3D.position.z,-12,10);
+  }
+});
+document.querySelector('#cameraRig').setAttribute('quest-thumbstick-move','');
+
+scene.addEventListener('enter-vr',()=>{
+  document.querySelector('#hint').textContent='Joystick izquierdo: caminar · derecho: girar · gatillo: seleccionar';
+});
+scene.addEventListener('exit-vr',()=>{
+  document.querySelector('#hint').textContent='Mira una flor y pulsa el gatillo · WASD para caminar';
+});
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){
+    document.querySelector('#card').style.display='none';
+    document.querySelector('#caseGallery').style.display='none';
+  }
+});
+
+updateHUD();
 </script>
-</body></html>
+</body>
+</html>
