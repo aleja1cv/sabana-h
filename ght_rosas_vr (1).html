@@ -1,661 +1,946 @@
 <!doctype html>
 <html lang="es">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>GHT | Entrenamiento VR · Corte de rosas Freedom</title>
-<script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
-<style>
-:root{--green:#153d2d;--mint:#d8f1e3;--cream:#f7f5ef;--red:#b72c3b}
-*{box-sizing:border-box}
-body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:#12251c;color:#fff}
-#hud{position:fixed;z-index:5;left:18px;top:18px;width:min(365px,calc(100vw - 36px));background:linear-gradient(145deg,rgba(12,36,26,.97),rgba(19,56,38,.94));border:1px solid #e8fff02e;border-radius:19px;padding:18px;backdrop-filter:blur(14px);box-shadow:0 20px 60px #06130d70}
-.brand{font-size:10px;letter-spacing:2px;color:#bce7c9;font-weight:850}
-h1{font-size:21px;letter-spacing:-.3px;margin:7px 0 8px}
-p{font-size:13px;line-height:1.5;margin:6px 0;color:#dce9df}
-#status{color:#c3ebce;font-weight:750;font-size:12px;margin-top:10px}
-#progress{height:6px;background:#ffffff24;border-radius:9px;overflow:hidden;margin:10px 0}
-#bar{height:100%;width:0;background:linear-gradient(90deg,#64b57a,#d8f1e3);transition:width .3s}
-button{border:0;border-radius:10px;padding:10px 12px;font-weight:800;cursor:pointer;font-size:12px;transition:filter .16s,transform .16s}
-button:hover{filter:brightness(1.06);transform:translateY(-1px)}
-.primary{background:#d8f1e3;color:#153d2d}
-.secondary{background:#ffffff16;color:#fff;border:1px solid #ffffff3d}
-.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-.actions button{flex:1}
-#card{position:fixed;z-index:6;right:18px;top:18px;width:min(365px,calc(100vw - 36px));background:rgba(247,245,239,.97);color:#173c2d;border:1px solid #244b34;border-radius:20px;padding:17px;display:none;box-shadow:0 20px 60px #06130d70}
-#card h2{font-size:20px;letter-spacing:-.3px;margin:4px 0 8px}
-#card p{font-size:12px;line-height:1.5;color:#2e473b}
-#photoReference{display:block;width:100%;height:170px;object-fit:cover;border-radius:12px;margin:9px 0;background:#e6e8dc}
-#intro{position:fixed;inset:0;z-index:10;background:radial-gradient(ellipse at 70% 25%,#4a7d55bd,#0a2018f5 70%);display:flex;align-items:center;justify-content:center;padding:18px;backdrop-filter:blur(8px)}
-.introbox{width:min(650px,100%);max-height:92vh;overflow:auto;background:#f7f5ef;color:#153d2d;border:1px solid #315a42;border-radius:23px;padding:clamp(22px,5vw,36px);box-shadow:0 28px 95px #0008}
-.introbox h1{font-size:clamp(27px,5vw,43px);line-height:1.02;letter-spacing:-1px}
-.introbox p{color:#385447;font-size:13px;line-height:1.55}
-.pill{display:inline-block;background:#e1eee4;padding:7px 10px;border-radius:20px;font-size:10px;font-weight:800;margin:3px}
-#reticle{position:fixed;z-index:4;left:50%;top:50%;width:10px;height:10px;border:1.5px solid white;border-radius:50%;transform:translate(-50%,-50%);pointer-events:none;box-shadow:0 0 8px #000}
-#hint{position:fixed;z-index:4;bottom:18px;left:50%;transform:translateX(-50%);background:#0c261ee8;border:1px solid #ffffff30;padding:10px 15px;border-radius:20px;font-size:11px;white-space:nowrap;max-width:90vw;text-align:center}
-.caseGallery{position:fixed;z-index:20;inset:0;display:none;place-items:center;padding:18px;background:#08180edc;backdrop-filter:blur(8px)}
-.caseGalleryBox{width:min(900px,100%);max-height:90vh;overflow:auto;background:#f7f5ef;color:#153d2d;border-radius:20px;padding:20px}
-.caseGalleryBox header{display:flex;justify-content:space-between;align-items:center}
-.caseGalleryBox p{color:#4a6051;font-size:13px;line-height:1.55}
-.caseGalleryGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px}
-.caseGalleryGrid figure{margin:0;background:#e9eee7;border-radius:13px;padding:8px}
-.caseGalleryGrid img{width:100%;height:190px;object-fit:cover;border-radius:11px}
-.caseGalleryGrid figcaption{font-size:11px;font-weight:700;padding:6px 2px}
-@media(max-width:600px){
- #hud{left:9px;top:9px;padding:13px;width:calc(100vw - 18px)}
- #hud h1{font-size:18px}
- #card{left:9px;right:9px;top:auto;bottom:50px;width:auto;padding:13px}
- #photoReference{height:125px}
- .introbox{padding:20px}
- #hint{font-size:9px}
-}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <meta name="theme-color" content="#12251c">
+  <title>GHT · Escuela de corte Freedom</title>
+  <script src="https://aframe.io/releases/1.8.0/aframe.min.js"></script>
+  <style>
+    :root {
+      --pine: #153d2d;
+      --pine-dark: #10271d;
+      --mint: #d8f1e3;
+      --cream: #f7f5ef;
+      --gold: #e2c68f;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      color: white;
+      background: #12251c;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+    a-scene { position: fixed; inset: 0; }
+    button { font: inherit; cursor: pointer; border: 0; }
+    #topbar {
+      position: fixed;
+      z-index: 5;
+      top: 16px;
+      left: 18px;
+      right: 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      pointer-events: none;
+    }
+    .brand, .stat, #hud {
+      background: rgba(11, 33, 25, .92);
+      border: 1px solid #ffffff28;
+      box-shadow: 0 12px 40px #0004;
+      backdrop-filter: blur(12px);
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 13px;
+      border-radius: 14px;
+      pointer-events: auto;
+    }
+    .brand-mark {
+      display: grid;
+      width: 30px;
+      height: 30px;
+      place-items: center;
+      border-radius: 9px;
+      color: var(--pine);
+      background: var(--mint);
+      font-weight: 950;
+    }
+    .brand small {
+      display: block;
+      color: #bce7c9;
+      font-size: 9px;
+      font-weight: 850;
+      letter-spacing: 1.7px;
+    }
+    .brand strong { font-size: 13px; }
+    #stats { display: flex; gap: 8px; pointer-events: auto; }
+    .stat {
+      min-width: 92px;
+      padding: 8px 11px;
+      border-radius: 12px;
+    }
+    .stat span {
+      display: block;
+      color: #adc3b4;
+      font-size: 9px;
+      letter-spacing: 1.1px;
+      text-transform: uppercase;
+    }
+    .stat b { font-size: 14px; }
+    #hud {
+      position: fixed;
+      z-index: 5;
+      left: 18px;
+      bottom: 18px;
+      width: min(355px, calc(100vw - 36px));
+      padding: 15px;
+      border-radius: 17px;
+    }
+    .eyebrow {
+      color: #a8dbb8;
+      font-size: 9px;
+      font-weight: 850;
+      letter-spacing: 1.6px;
+      text-transform: uppercase;
+    }
+    #mission {
+      margin: 6px 0 8px;
+      font-size: 15px;
+      font-weight: 750;
+      line-height: 1.35;
+    }
+    #subline {
+      margin: 0;
+      color: #c2d0c5;
+      font-size: 11px;
+      line-height: 1.45;
+    }
+    .progress {
+      height: 5px;
+      margin: 12px 0 9px;
+      overflow: hidden;
+      border-radius: 10px;
+      background: #ffffff20;
+    }
+    #bar {
+      width: 0;
+      height: 100%;
+      border-radius: 10px;
+      background: linear-gradient(90deg, #64b57a, #d8f1e3);
+      transition: width .3s;
+    }
+    .buttons { display: flex; gap: 8px; margin-top: 11px; }
+    .btn {
+      padding: 10px 12px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 850;
+    }
+    .btn.primary { color: var(--pine); background: var(--mint); }
+    .btn.secondary {
+      color: white;
+      background: #ffffff12;
+      border: 1px solid #ffffff30;
+    }
+    .buttons .btn { flex: 1; }
+    #intro, #gallery {
+      position: fixed;
+      z-index: 10;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 18px;
+      background: radial-gradient(ellipse at 70% 25%, #416e4dce, #0a2018f5 72%);
+      backdrop-filter: blur(8px);
+    }
+    .intro-card, .gallery-card {
+      width: min(700px, 100%);
+      max-height: 92vh;
+      overflow: auto;
+      padding: clamp(20px, 5vw, 35px);
+      border: 1px solid #315a42;
+      border-radius: 22px;
+      color: var(--pine);
+      background: var(--cream);
+      box-shadow: 0 28px 90px #0008;
+    }
+    .intro-card h1 {
+      margin: 19px 0 10px;
+      font-size: clamp(29px, 5vw, 45px);
+      letter-spacing: -1.2px;
+      line-height: 1.03;
+    }
+    .intro-card p, .gallery-card p {
+      color: #4c6254;
+      font-size: 13px;
+      line-height: 1.55;
+    }
+    .pill {
+      display: inline-block;
+      margin: 3px;
+      padding: 7px 10px;
+      border-radius: 20px;
+      color: #286043;
+      background: #e1eee4;
+      font-size: 10px;
+      font-weight: 850;
+    }
+    .case-tiles {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 9px;
+      margin: 16px 0;
+    }
+    .tile {
+      padding: 11px;
+      border: 1px solid #dae5da;
+      border-radius: 13px;
+      background: #eaf0e8;
+    }
+    .tile b { display: block; margin: 5px 0; font-size: 12px; }
+    .tile p { margin: 0; font-size: 10px; }
+    .note {
+      padding: 11px 13px;
+      border-left: 3px solid #caa567;
+      border-radius: 0 10px 10px 0;
+      color: #5d5541;
+      background: #f2eddf;
+      font-size: 10px;
+      line-height: 1.5;
+    }
+    #introButtons { display: flex; gap: 9px; margin-top: 16px; }
+    #introButtons .btn { flex: 1; padding: 13px; }
+    #card {
+      position: fixed;
+      z-index: 8;
+      top: 83px;
+      right: 18px;
+      display: none;
+      width: min(360px, calc(100vw - 36px));
+      padding: 15px;
+      border: 1px solid #244b34;
+      border-radius: 18px;
+      color: var(--pine);
+      background: rgba(247, 245, 239, .98);
+      box-shadow: 0 20px 60px #0005;
+    }
+    #card h2 { margin: 6px 0; font-size: 18px; }
+    #card p { color: #455e4d; font-size: 11px; line-height: 1.45; }
+    #photo {
+      display: block;
+      width: 100%;
+      height: 145px;
+      margin: 8px 0;
+      border-radius: 11px;
+      background: #e4e8dc;
+      object-fit: cover;
+    }
+    #answerButtons { display: flex; gap: 8px; margin-top: 10px; }
+    #answerButtons .btn { flex: 1; }
+    #gallery {
+      z-index: 9;
+      display: none;
+      background: #071710dc;
+    }
+    .gallery-card { width: min(900px, 100%); }
+    .gallery-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+      gap: 10px;
+    }
+    .gallery-grid figure {
+      margin: 0;
+      padding: 8px;
+      border-radius: 12px;
+      background: #e9eee7;
+    }
+    .gallery-grid img {
+      width: 100%;
+      height: 180px;
+      border-radius: 10px;
+      object-fit: cover;
+    }
+    .gallery-grid figcaption { padding: 5px 2px; font-size: 10px; font-weight: 750; }
+    #reticle {
+      position: fixed;
+      z-index: 4;
+      top: 50%;
+      left: 50%;
+      width: 9px;
+      height: 9px;
+      border: 1.5px solid white;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      box-shadow: 0 0 7px #000;
+    }
+    #hint {
+      position: fixed;
+      z-index: 4;
+      bottom: 18px;
+      left: 50%;
+      max-width: 90vw;
+      padding: 9px 14px;
+      transform: translateX(-50%);
+      border: 1px solid #ffffff28;
+      border-radius: 20px;
+      color: #e6efe8;
+      background: #0b2119e8;
+      font-size: 10px;
+      text-align: center;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+    @media(max-width:640px) {
+      #topbar { top: 8px; left: 8px; right: 8px; }
+      .brand { padding: 7px 9px; }
+      .brand strong { font-size: 10px; }
+      .stat { min-width: 68px; padding: 7px; }
+      .stat b { font-size: 12px; }
+      #hud { left: 8px; bottom: 8px; width: min(320px, calc(100vw - 16px)); padding: 12px; }
+      #hint { bottom: auto; top: 57px; font-size: 9px; }
+      #card { top: auto; right: 8px; bottom: 8px; width: calc(100vw - 16px); }
+      .case-tiles { gap: 5px; }
+      .tile { padding: 8px; }
+      .tile b { font-size: 10px; }
+      .tile p { font-size: 9px; }
+    }
+  </style>
 </head>
 <body>
-
-<div id="hud">
-  <div class="brand">GHT · GROWERS HUB TRADING</div>
-  <h1>Entrenamiento de corte · Freedom</h1>
-  <p id="mission">Explora el cultivo y selecciona una rosa para observarla.</p>
-  <div id="progress"><div id="bar"></div></div>
-  <div id="status">Casos resueltos: 0 de 9 · Puntuación: 0</div>
-  <div class="actions">
-    <button class="primary" id="startVR">Entrar en VR</button>
-    <button class="secondary" id="reset">Reiniciar</button>
-    <button class="secondary" id="showGallery">Casos difíciles</button>
+  <div id="topbar">
+    <div class="brand">
+      <div class="brand-mark">G</div>
+      <div><small>GROWERS HUB TRADING</small><strong>Escuela de corte · Freedom</strong></div>
+    </div>
+    <div id="stats">
+      <div class="stat"><span>Avance</span><b id="count">0 / 9</b></div>
+      <div class="stat"><span>Aciertos</span><b id="points">0</b></div>
+    </div>
   </div>
-</div>
 
-<div id="card">
-  <div class="brand" style="color:#347451">ROSA SELECCIONADA</div>
-  <h2 id="flowerTitle">Estado de la flor</h2>
-  <p id="flowerDesc"></p>
-  <img id="photoReference" alt="Foto real del banco técnico GHT">
-  <p id="flowerRule"></p>
-  <div class="actions" id="answers"></div>
-  <div class="actions">
-    <button class="secondary" id="closeCard" style="color:#153d2d;border-color:#153d2d33">Cerrar ficha</button>
+  <div id="hud">
+    <div class="eyebrow">Práctica de reconocimiento</div>
+    <div id="mission">Recorre la cama y observa las flores señaladas.</div>
+    <p id="subline">Selecciona una rosa para decidir si está lista para corte.</p>
+    <div class="progress"><div id="bar"></div></div>
+    <div class="buttons">
+      <button class="btn primary" id="enterVR">Entrar en VR</button>
+      <button class="btn secondary" id="openGallery">Casos difíciles</button>
+      <button class="btn secondary" id="reset">Reiniciar</button>
+    </div>
   </div>
-</div>
 
-<div id="intro">
-  <div class="introbox">
-    <div class="brand" style="color:#347451">GHT · CAPACITACIÓN INMERSIVA</div>
-    <h1>Aprende a reconocer el punto de corte</h1>
-    <p>Recorre un invernadero tridimensional y practica decisiones con fotos del material de GHT. Recibirás retroalimentación después de responder y un resultado al terminar.</p>
-    <span class="pill">Meta Quest 3 · WebXR</span>
-    <span class="pill">Mando o mirada</span>
-    <span class="pill">9 flores de práctica</span>
-    <p><b>Quest 3:</b> joystick izquierdo para caminar, joystick derecho para girar, apunta con el láser y pulsa el gatillo para seleccionar. En computador usa WASD, ratón y clic.</p>
-    <p><b>Punto 3:</b> criterio escrito de GHT: caracol definido mostrando centro, pétalos de rojo vivo e intenso y patrón de copa. <b>Punto 2:</b> cabeza más pequeña, rojo más oscuro y sépalos más pegados a los pétalos.</p>
-    <p style="font-size:11px">La carpeta de sobreabierta se utiliza como ejemplo visual. El material consultado no indica un umbral técnico exacto para esa etapa; se debe validar con el equipo agronómico de GHT.</p>
-    <button class="primary" id="begin" style="width:100%;margin-top:8px;padding:14px">Comenzar recorrido</button>
+  <div id="card">
+    <div class="eyebrow" style="color:#347451">EJERCICIO GHT · <span id="round"></span></div>
+    <h2 id="flowerTitle"></h2>
+    <p id="flowerDesc"></p>
+    <img id="photo" alt="Foto de referencia de GHT">
+    <p id="flowerRule"></p>
+    <div id="answerButtons">
+      <button class="btn primary" data-answer="cortar">✂ Cortar</button>
+      <button class="btn secondary" data-answer="dejar" style="color:#153d2d;border-color:#153d2d33">Dejar</button>
+    </div>
   </div>
-</div>
 
-<div id="caseGallery" class="caseGallery">
-  <section class="caseGalleryBox">
-    <header>
-      <div>
-        <div class="brand" style="color:#347451">MATERIAL DE REFERENCIA GHT</div>
-        <h2>Casos difíciles y ruido visual</h2>
+  <div id="intro">
+    <div class="intro-card">
+      <div class="eyebrow" style="color:#347451">GHT · CAPACITACIÓN INMERSIVA</div>
+      <h1>Aprende a reconocer el punto de corte</h1>
+      <p>Practica en un invernadero 3D con rosas Freedom, recibe retroalimentación y consulta tu puntuación final.</p>
+      <span class="pill">Meta Quest 3 · WebXR</span>
+      <span class="pill">Joystick para moverte</span>
+      <span class="pill">Gatillo para seleccionar</span>
+      <div class="case-tiles">
+        <div class="tile"><b>Punto 2 · cerrado</b><p>Cabeza pequeña, rojo oscuro y sépalos más pegados.</p></div>
+        <div class="tile"><b>Punto 3 · óptimo</b><p>Caracol definido, centro visible, rojo vivo y copa.</p></div>
+        <div class="tile"><b>Sobreabierta</b><p>Ejemplo visual de práctica; umbral por validar con GHT.</p></div>
       </div>
-      <button class="secondary" id="closeGallery" style="color:#153d2d">Cerrar</button>
-    </header>
-    <p>Observa qué elemento dificulta leer la flor. El documento de GHT no establece una respuesta técnica individual para cada imagen, así que estos casos son de discusión y no llevan puntuación.</p>
-    <div class="caseGalleryGrid" id="caseGalleryGrid"></div>
-  </section>
-</div>
+      <div class="note">
+        <b>Criterio escrito GHT:</b> el punto 3 es el punto de corte; el punto 2 es una falla frecuente. La guía de GHT no especifica un umbral técnico exacto para sobreapertura. Los casos difíciles se usan para observación sin puntuación.
+      </div>
+      <p><b>Controles Quest:</b> joystick izquierdo para trasladarte, joystick derecho para girar, apunta con el láser y pulsa el gatillo para seleccionar. En computador puedes usar WASD, ratón y clic.</p>
+      <div id="introButtons">
+        <button class="btn primary" id="begin">Comenzar práctica</button>
+        <button class="btn primary" id="beginVR">Comenzar en VR</button>
+      </div>
+    </div>
+  </div>
 
-<div id="reticle"></div>
-<div id="hint">Joystick izquierdo: caminar · joystick derecho: girar · gatillo: seleccionar</div>
+  <div id="gallery">
+    <div class="gallery-card">
+      <div class="gallery-head">
+        <div>
+          <div class="eyebrow" style="color:#347451">BANCO VISUAL GHT</div>
+          <h2>Casos difíciles y ruido visual</h2>
+        </div>
+        <button class="btn secondary" id="closeGallery" style="color:#153d2d;border-color:#153d2d33">Cerrar</button>
+      </div>
+      <p>Observa qué rasgo dificulta la lectura. GHT no define una respuesta individual para cada imagen; estos ejemplos no se califican.</p>
+      <div class="gallery-grid" id="galleryGrid"></div>
+    </div>
+  </div>
 
-<a-scene
-  renderer="colorManagement:true; physicallyCorrectLights:true; antialias:true; powerPreference:high-performance"
-  background="color:#c9e0d3"
-  vr-mode-ui="enabled:false"
-  webxr="optionalFeatures: local-floor, bounded-floor, hand-tracking"
-  loading-screen="enabled:false">
+  <div id="reticle"></div>
+  <div id="hint">Joystick izquierdo: caminar · derecho: girar · gatillo: seleccionar</div>
 
-  <a-assets>
-    <a-mixin id="leaf"
-      geometry="primitive:sphere; radius:.12; segmentsWidth:8; segmentsHeight:6"
-      material="color:#2d733e; roughness:.9"
-      scale="1.7 .55 .22">
-    </a-mixin>
-  </a-assets>
+  <a-scene
+    renderer="colorManagement:true; physicallyCorrectLights:true; antialias:true; powerPreference:high-performance"
+    background="color:#c7ddcf"
+    vr-mode-ui="enabled:false"
+    webxr="optionalFeatures: local-floor, bounded-floor"
+    loading-screen="enabled:false">
 
-  <a-entity light="type:ambient; intensity:.82; color:#f4fff4"></a-entity>
-  <a-entity light="type:directional; intensity:1.05; color:#fff5df" position="-4 8 3"></a-entity>
+    <a-assets>
+      <a-mixin id="leaf"
+        geometry="primitive:sphere; radius:.13; segmentsWidth:8; segmentsHeight:6"
+        material="color:#327044; roughness:.92"
+        scale="1.55 .45 .2">
+      </a-mixin>
+    </a-assets>
 
-  <a-plane rotation="-90 0 0" width="34" height="44" color="#745d42" material="roughness:1"></a-plane>
-  <a-entity id="structure"></a-entity>
-  <a-entity id="plants"></a-entity>
+    <a-entity light="type:ambient; intensity:.88; color:#f4fff4"></a-entity>
+    <a-entity light="type:directional; intensity:1.08; color:#fff2de" position="-4 8 3"></a-entity>
+    <a-entity light="type:directional; intensity:.38; color:#e1f1ff" position="5 5 -8"></a-entity>
 
-  <a-entity id="cameraRig" position="0 0 7">
-    <a-camera id="camera" position="0 1.65 0"
-      wasd-controls="acceleration:18"
-      look-controls="pointerLockEnabled:true">
-      <a-cursor color="#f7fff9" fuse="false"
-        raycaster="objects:.flower,.vrAnswer; far:7"
-        material="shader:flat; opacity:.8">
-      </a-cursor>
-    </a-camera>
-    <a-entity id="rightHand" laser-controls="hand:right"
-      raycaster="objects:.flower,.vrAnswer; far:7"
-      line="color:#d9f5e3; opacity:.7"></a-entity>
-    <a-entity id="leftHand" laser-controls="hand:left"
-      raycaster="objects:.flower,.vrAnswer; far:7"
-      line="color:#d9f5e3; opacity:.7"></a-entity>
-  </a-entity>
-</a-scene>
+    <a-plane position="0 -.03 -3" rotation="-90 0 0" width="18" height="26" color="#806b4c" material="roughness:1"></a-plane>
+    <a-plane position="0 0 -3" rotation="-90 0 0" width="1.65" height="25" color="#b4a27d"></a-plane>
+    <a-entity id="greenhouse"></a-entity>
+    <a-entity id="plantLayer"></a-entity>
+    <a-entity id="targetLayer"></a-entity>
+
+    <a-entity id="rig" position="0 0 2.8">
+      <a-camera id="camera" position="0 1.62 0" wasd-controls="acceleration:12" look-controls="pointerLockEnabled:true">
+        <a-cursor
+          color="#f8fff9"
+          fuse="false"
+          raycaster="objects:.flower,.ui-hit; far:7"
+          material="shader:flat; opacity:.85">
+        </a-cursor>
+
+        <a-entity id="vrPanel" position="0 0 -1.55" visible="false">
+          <a-plane width="1.55" height=".92" material="color:#10291f;opacity:.97;shader:flat;side:double"></a-plane>
+          <a-text id="vrHeading" value="EJERCICIO GHT" position="-.68 .36 .02" width="1.35" color="#a9dcb9" scale=".72 .72 .72"></a-text>
+          <a-text id="vrTitle" value="" position="-.68 .23 .02" width="1.3" color="#fff" scale=".88 .88 .88" wrap-count="30"></a-text>
+          <a-text id="vrDesc" value="" position="-.68 .04 .02" width=".72" color="#dce9df" scale=".62 .62 .62" wrap-count="32"></a-text>
+          <a-image id="vrPhoto" position=".43 .02 .025" width=".35" height=".48"></a-image>
+          <a-text id="vrRule" value="" position="-.68 -.19 .02" width="1.28" color="#e5c98e" scale=".53 .53 .53" wrap-count="38"></a-text>
+
+          <a-plane id="vrCut" class="ui-hit" data-choice="cortar" position="-.34 -.35 .03" width=".56" height=".18" color="#d8f1e3" material="shader:flat"></a-plane>
+          <a-text value="CORTAR" position="-.48 -.365 .04" width=".4" color="#173b2d" scale=".58 .58 .58"></a-text>
+          <a-plane id="vrLeave" class="ui-hit" data-choice="dejar" position=".32 -.35 .03" width=".56" height=".18" color="#f0e9d6" material="shader:flat"></a-plane>
+          <a-text value="DEJAR" position=".18 -.365 .04" width=".4" color="#173b2d" scale=".58 .58 .58"></a-text>
+          <a-plane id="vrNext" class="ui-hit" data-choice="next" position="0 -.35 .03" width=".65" height=".18" color="#d8f1e3" material="shader:flat" visible="false"></a-plane>
+          <a-text id="vrNextLabel" value="CONTINUAR" position="-.2 -.365 .04" width=".43" color="#173b2d" scale=".58 .58 .58" visible="false"></a-text>
+          <a-plane id="vrRestart" class="ui-hit" data-choice="restart" position="0 -.35 .03" width=".65" height=".18" color="#d8f1e3" material="shader:flat" visible="false"></a-plane>
+          <a-text id="vrRestartLabel" value="REINICIAR" position="-.2 -.365 .04" width=".43" color="#173b2d" scale=".58 .58 .58" visible="false"></a-text>
+        </a-entity>
+      </a-camera>
+
+      <a-entity id="leftController"
+        laser-controls="hand:left"
+        raycaster="objects:.flower,.ui-hit; far:7"
+        line="color:#d9f5e3; opacity:.8">
+      </a-entity>
+      <a-entity id="rightController"
+        laser-controls="hand:right"
+        raycaster="objects:.flower,.ui-hit; far:7"
+        line="color:#d9f5e3; opacity:.8">
+      </a-entity>
+    </a-entity>
+  </a-scene>
 
 <script>
-const scene=document.querySelector('a-scene');
-const structure=document.querySelector('#structure');
-const plants=document.querySelector('#plants');
-const cases=[
-  {stage:'Punto 2 · Botón cerrado',desc:'La cabeza se ve más pequeña, el rojo es más oscuro y los sépalos están más pegados a los pétalos.',rule:'Criterio GHT: no cortar en punto 2.',decision:'dejar',feedback:'El material de GHT identifica el punto 2 cerrado como una falla frecuente de corte.'},
-  {stage:'Punto 3 · Punto de corte',desc:'Busca el caracol definido mostrando el centro, pétalos de color vivo e intenso y forma de copa.',rule:'Criterio documentado GHT para Freedom.',decision:'cortar',feedback:'El punto 3 se reconoce por el centro definido, el rojo vivo e intenso y el patrón de copa.'},
-  {stage:'Flor sobreabierta',desc:'Compara la flor con los ejemplos visuales de sobreabierta incluidos por GHT.',rule:'Umbral exacto de sobreapertura: pendiente de validar con GHT.',decision:'dejar',feedback:'Este ejercicio usa el banco visual de GHT; valida la regla exacta con el protocolo agronómico.'}
+const scene = document.querySelector('a-scene');
+const rig = document.querySelector('#rig');
+const camera = document.querySelector('#camera');
+const plantLayer = document.querySelector('#plantLayer');
+const targetLayer = document.querySelector('#targetLayer');
+const assetPath = 'assets/ght-cases/';
+
+const stages = [
+  {
+    name: 'Punto 2 · botón cerrado',
+    desc: 'La cabeza se ve más pequeña, el rojo es más oscuro y los sépalos están más pegados a los pétalos.',
+    rule: 'Criterio escrito GHT: no cortar en punto 2.',
+    decision: 'dejar',
+    feedback: 'GHT identifica el punto 2 cerrado como una falla frecuente de corte.'
+  },
+  {
+    name: 'Punto 3 · punto óptimo',
+    desc: 'Busca el caracol definido mostrando centro, pétalos de rojo vivo e intenso y patrón de copa.',
+    rule: 'Criterio escrito GHT para Freedom: punto 3.',
+    decision: 'cortar',
+    feedback: 'El punto 3 se identifica por el centro definido, el rojo vivo e intenso y la forma de copa.'
+  },
+  {
+    name: 'Flor sobreabierta',
+    desc: 'Compara esta flor con los ejemplos visuales de sobreabierta incluidos por GHT.',
+    rule: 'Umbral exacto de sobreapertura: pendiente de validar con GHT.',
+    decision: 'dejar',
+    feedback: 'Este ejercicio utiliza el banco visual; valida la regla exacta con el protocolo agronómico.'
+  }
 ];
 
-let resolved=new Set();
-let score=0;
-let selected=null;
-let started=false;
-
-const ghtAsset='assets/ght-cases/';
-const photos={
-  bud1:'01_Inmaduro_No_Cortar_14.jpeg',
-  opt1:'02_Punto_Optimo_Corte_17.jpeg',
-  open1:'03_Pasado_Sobreabierto_13.jpeg',
-  opt2:'02_Punto_Optimo_Corte_2.jpeg',
-  bud2:'01_Inmaduro_No_Cortar_1.jpeg',
-  open2:'03_Pasado_Sobreabierto_58.jpeg',
-  open3:'03_Pasado_Sobreabierto_58.jpeg',
-  opt3:'02_Punto_Optimo_Corte_50.jpeg',
-  bud3:'01_Inmaduro_No_Cortar_60.jpeg'
-};
-
-const roseDefs=[
-  [-3.9,-2,0,'bud1'],
-  [-3.9, 2,1,'opt1'],
-  [-3.9, 6,2,'open1'],
-  [ 3.9,-3,1,'opt2'],
-  [ 3.9, 1,0,'bud2'],
-  [ 3.9, 5,2,'open2'],
-  [-3.9,10,2,'open3'],
-  [ 3.9,10,1,'opt3'],
-  [ 0,  -4,0,'bud3']
+const roseDefs = [
+  [-2.35, -1.3, 0, 'bud1', '01_Inmaduro_No_Cortar_14.jpeg'],
+  [ 2.35, -2.0, 1, 'opt1', '02_Punto_Optimo_Corte_17.jpeg'],
+  [-2.35, -3.1, 2, 'open1','03_Pasado_Sobreabierto_13.jpeg'],
+  [ 2.35, -4.0, 1, 'opt2', '02_Punto_Optimo_Corte_2.jpeg'],
+  [-2.35, -5.0, 0, 'bud2', '01_Inmaduro_No_Cortar_1.jpeg'],
+  [ 2.35, -6.0, 2, 'open2','03_Pasado_Sobreabierto_58.jpeg'],
+  [-2.35, -7.1, 2, 'open3','03_Pasado_Sobreabierto_58.jpeg'],
+  [ 2.35, -8.0, 1, 'opt3', '02_Punto_Optimo_Corte_50.jpeg'],
+  [ 0.00, -9.0, 0, 'bud3', '01_Inmaduro_No_Cortar_60.jpeg']
 ];
 
-function el(tag,attrs,parent){
-  const e=document.createElement(tag);
-  Object.entries(attrs||{}).forEach(([k,v])=>e.setAttribute(k,v));
-  (parent||structure).appendChild(e);
-  return e;
+const resolved = new Set();
+const flowers = new Map();
+let score = 0;
+let started = false;
+let selectedId = null;
+
+function entity(tag, attrs, parent) {
+  const el = document.createElement(tag);
+  Object.entries(attrs || {}).forEach(([key, value]) => el.setAttribute(key, value));
+  (parent || plantLayer).appendChild(el);
+  return el;
 }
 
-function box(parent,x,y,z,w,h,d,color){
-  return el('a-box',{
-    position:x+' '+y+' '+z,
-    width:w,height:h,depth:d,color,
-    material:'roughness:1'
-  },parent);
+function cylinder(parent, x, y, z, radius, height, color, rotation='0 0 0') {
+  return entity('a-cylinder', {
+    position: x+' '+y+' '+z,
+    radius,
+    height,
+    color,
+    rotation,
+    material: 'roughness:.9'
+  }, parent);
 }
 
-// Invernadero: postes, vigas, plástico translúcido, camas y alambres.
-for(let x=-7;x<=7;x+=3.5){
-  el('a-cylinder',{position:x+' 3.1 -7',radius:.045,height:6.2,color:'#8a9d91'},structure);
-  el('a-cylinder',{position:x+' 3.1 14',radius:.045,height:6.2,color:'#8a9d91'},structure);
-  el('a-cylinder',{position:x+' 6.1 3.5',radius:.035,height:22,rotation:'90 0 0',color:'#a7b9ad'},structure);
-}
-for(let z=-7;z<=14;z+=4){
-  el('a-cylinder',{position:'0 6.05 '+z,radius:.035,height:15,rotation:'0 0 90',color:'#a7b9ad'},structure);
-}
-el('a-plane',{
-  position:'0 5.95 3.5',rotation:'90 0 0',width:15,height:22,
-  color:'#eaf6ee',opacity:.16,transparent:true,side:'double',
-  material:'roughness:.3; metalness:0'
-},structure);
+function addGreenhouse() {
+  const frame = document.querySelector('#greenhouse');
 
-for(let z=-6;z<14;z+=4){
-  for(const x of [-5.2,-1.8,1.8,5.2]){
-    box(structure,x,.18,z,1.3,.35,3.7,'#514b38');
-    for(let y=.65;y<2.4;y+=.48){
-      el('a-cylinder',{position:x+' '+y+' '+z,radius:.035,height:3.2,color:'#3e7c45'},plants);
-      for(let j=0;j<5;j++){
-        const side=j%2?1:-1;
-        const zz=z-.95+j*.46;
-        const yy=y+(j%3)*.08;
-        el('a-entity',{
-          position:(x+side*.18)+' '+yy+' '+zz,
-          rotation:'0 '+(side*28)+' '+(side*22),
-          mixin:'leaf'
-        },plants);
-      }
+  for (let x=-5; x<=5; x+=2.5) {
+    cylinder(frame,x,2.8,-1.2,.045,5.6,'#82968b');
+    cylinder(frame,x,2.8,-11,.045,5.6,'#82968b');
+    cylinder(frame,x,5.45,-6,.035,10,'#aabbb0','90 0 0');
+  }
+  for (let z=-1; z>=-11; z-=2) {
+    cylinder(frame,0,5.4,z,.03,10,'#adbbb2','0 0 90');
+  }
+
+  entity('a-plane',{
+    position:'0 5.25 -6',
+    rotation:'90 0 0',
+    width:10,
+    height:10,
+    color:'#eff8ef',
+    opacity:.18,
+    transparent:true,
+    side:'double',
+    material:'roughness:.25'
+  },frame);
+
+  for (const x of [-2.7,2.7]) {
+    entity('a-box',{
+      position:x+' .18 -5.5',
+      width:1.25,
+      height:.35,
+      depth:10,
+      color:'#564c3a',
+      material:'roughness:1'
+    },frame);
+    for (const y of [1.1,1.65,2.2]) {
+      cylinder(frame,x*1.55,y,-5.5,.012,10,'#b6c7bc','90 0 0');
     }
   }
 }
-for(const y of [1.1,1.65,2.2]){
-  el('a-cylinder',{position:'-5.2 '+y+' 3.5',rotation:'90 0 0',height:22,radius:.018,color:'#b6c7bc'},structure);
-  el('a-cylinder',{position:'5.2 '+y+' 3.5',rotation:'90 0 0',height:22,radius:.018,color:'#b6c7bc'},structure);
+addGreenhouse();
+
+function addLeaf(parent, x, y, z, angle, color='#337343') {
+  entity('a-sphere',{
+    position:x+' '+y+' '+z,
+    rotation:'0 '+angle+' 22',
+    scale:'.22 .07 .12',
+    color,
+    material:'roughness:.95'
+  },parent);
 }
 
-function makeRose(x,z,type,id){
-  const g=el('a-entity',{position:x+' 0 '+z},plants);
-  el('a-cylinder',{position:'0 1.25 0',radius:.035,height:2.5,color:'#2b713d'},g);
-  for(let j=0;j<6;j++){
-    const side=j%2?1:-1;
-    el('a-entity',{
-      position:(side*.19)+' '+(.72+j*.24)+' '+(Math.sin(j)*.13),
-      rotation:'0 '+(j*65)+' '+(side*28),
-      mixin:'leaf'
-    },g);
+function makePlant(x,z,stage,id,photo) {
+  const root = entity('a-entity',{position:x+' 0 '+z},id ? targetLayer : plantLayer);
+  const flowerStage = stage === undefined ? 1 : stage;
+  const stemHeight = 1.8 + Math.sin(x+z)*.08;
+
+  cylinder(root,0,stemHeight/2,0,.025,stemHeight,'#286b3b');
+
+  for (let j=0;j<6;j++) {
+    const side = j%2 ? 1 : -1;
+    const y = .55 + j*.2;
+    addLeaf(root,side*.16,y,(j%3-1)*.13,j*53,j%3===0?'#4b8550':'#2d6e3d');
+    if(j%2===0) {
+      entity('a-cone',{
+        position:(side*.035)+' '+(y+.06)+' .02',
+        radiusBottom:.018,
+        radiusTop:0,
+        height:.1,
+        rotation:'0 0 '+(side*58),
+        color:'#4a7d4b'
+      },root);
+    }
   }
-  const top=el('a-entity',{
-    position:'0 2.43 0',
+
+  const head = entity('a-entity',{
+    position:'0 '+stemHeight+' 0',
     class:'flower',
-    'data-id':id||''
-  },g);
+    'data-id':id || ''
+  },root);
 
-  top.addEventListener('click',()=>selectFlower(id));
-  top.addEventListener('raycaster-intersected',()=>{
-    document.querySelector('#hint').textContent='Flor detectada · pulsa el gatillo para seleccionar';
-  });
-
-  for(let i=0;i<5;i++){
+  const sepalSpread = flowerStage===2 ? .16 : .09;
+  for(let i=0;i<5;i++) {
     const a=i*72;
-    el('a-entity',{
-      position:(Math.cos(a*Math.PI/180)*.11)+' -.04 '+(Math.sin(a*Math.PI/180)*.11),
-      rotation:'0 '+a+' '+(type===0?-20:25),
-      geometry:'primitive:cone; radiusBottom:.035; radiusTop:.008; height:.23',
-      material:'color:#26723a; roughness:.9'
-    },top);
+    entity('a-cone',{
+      position:(Math.cos(a*Math.PI/180)*sepalSpread)+' -.04 '+(Math.sin(a*Math.PI/180)*sepalSpread),
+      rotation:(flowerStage===2?'-48':'25')+' '+a+' 0',
+      radiusBottom:.025,
+      radiusTop:.004,
+      height:.18,
+      color:'#27723b'
+    },head);
   }
 
-  const petalCount=type===0?7:type===1?11:14;
-  const radius=type===0?.095:type===1?.16:.22;
+  const petalCount = flowerStage===0 ? 8 : flowerStage===1 ? 14 : 18;
+  const radius = flowerStage===0 ? .105 : flowerStage===1 ? .17 : .25;
 
-  for(let i=0;i<petalCount;i++){
-    const a=i*137.5;
-    const r=radius*(type===0?.58:type===1?.68:1.05);
-    const y=type===0?i*.009:(type===1?Math.sin(i*1.3)*.025:Math.sin(i*1.2)*.09);
-    const color=type===0?'#741b29':(type===1?'#c71936':'#d6384d');
-    el('a-sphere',{
-      position:(Math.cos(a*Math.PI/180)*r)+' '+y+' '+(Math.sin(a*Math.PI/180)*r),
-      rotation:(type===2?-25:15)+' '+a+' '+(type===2?Math.cos(a)*35:0),
-      scale:type===0?'.095 .07 .06':(type===1?'.12 .085 .075':'.16 .075 .11'),
-      color,
-      material:'roughness:.7; metalness:0'
-    },top);
+  for(let i=0;i<petalCount;i++) {
+    const angle=i*137.5;
+    const ring=Math.sqrt((i+.5)/petalCount);
+    const r=radius*ring;
+    const py=flowerStage===0 ? (1-ring)*.12 :
+      flowerStage===1 ? ring*.045 :
+      -.015+ring*.02;
+    const petalColor=flowerStage===0
+      ? (i%3===0?'#711827':'#921b2d')
+      : (i%4===0?'#df3949':'#c51f38');
+    entity('a-sphere',{
+      position:(Math.cos(angle*Math.PI/180)*r)+' '+py+' '+(Math.sin(angle*Math.PI/180)*r),
+      rotation:(flowerStage===2?'-48':flowerStage===1?'-20':'8')+' '+angle+' '+(Math.sin(angle)*18),
+      scale:flowerStage===0?'.065 .11 .055':flowerStage===1?'.09 .15 .065':'.115 .19 .045',
+      color:petalColor,
+      material:'roughness:.65'
+    },head);
   }
 
-  for(let i=0;i<(type===0?3:5);i++){
-    el('a-sphere',{
-      position:Math.cos(i*2.4)*.035+' '+(.035+i*.012)+' '+Math.sin(i*2.4)*.035,
-      scale:'.055 .05 .05',
-      color:type===0?'#641525':'#a30f2b',
-      material:'roughness:.7'
-    },top);
+  for(let i=0;i<5;i++) {
+    const a=i*2.4;
+    entity('a-sphere',{
+      position:Math.cos(a)*.035+' .035 '+Math.sin(a)*.035,
+      scale:'.05 .035 .05',
+      color:'#99172b',
+      material:'roughness:.6'
+    },head);
   }
 
-  top.setAttribute('geometry','primitive:sphere; radius:.3');
-  top.setAttribute('material','color:#fff; opacity:.01; transparent:true');
-  el('a-torus',{
-    position:'0 0.01 0',rotation:'90 0 0',radius:.28,radiusTubular:.008,
-    color:'#f2dca1',material:'shader:flat; opacity:.75'
-  },top);
-  top.dataset.case=type;
-  return top;
+  head.setAttribute('geometry','primitive:sphere; radius:.3');
+  head.setAttribute('material','color:#fff; opacity:.01; transparent:true');
+  head.dataset.photo=photo || '';
+
+  if(id) {
+    flowers.set(id,head);
+    entity('a-torus',{
+      position:'0 -.22 0',
+      rotation:'90 0 0',
+      radius:.25,
+      radiusTubular:.008,
+      color:'#f1d99b',
+      material:'shader:flat; opacity:.8'
+    },head);
+    head.addEventListener('click',()=>selectFlower(id));
+  }
+
+  return head;
 }
 
-const roseNodes={};
-roseDefs.forEach(([x,z,type,id])=>roseNodes[id]=makeRose(x,z,type,id));
-
-function getRose(id){return roseDefs.find(r=>r[3]===id)}
-function getCase(id){const r=getRose(id);return r?cases[r[2]]:null}
-function isVR(){return scene.is('vr-mode')}
-
-function updateHUD(){
-  document.querySelector('#status').textContent=
-    'Casos resueltos: '+resolved.size+' de '+roseDefs.length+' · Puntuación: '+score;
-  document.querySelector('#bar').style.width=
-    (resolved.size/roseDefs.length*100)+'%';
-  document.querySelector('#mission').textContent=
-    resolved.size>=roseDefs.length?'Entrenamiento completado. Revisa el resultado.':
-    'Explora el cultivo y selecciona una rosa para observarla.';
-}
-
-function createVRPanel(){
-  if(document.querySelector('#trainingPanel'))return;
-  const camera=document.querySelector('#camera');
-  const panel=document.createElement('a-entity');
-  panel.id='trainingPanel';
-  panel.setAttribute('position','0 0 -1.65');
-  panel.setAttribute('visible','false');
-  camera.appendChild(panel);
-
-  const bg=document.createElement('a-plane');
-  bg.setAttribute('width','1.65');
-  bg.setAttribute('height','.94');
-  bg.setAttribute('material','color:#10291f;opacity:.97;shader:flat;side:double');
-  panel.appendChild(bg);
-
-  function text(id,value,position,width,color,scale){
-    const t=document.createElement('a-text');
-    t.id=id;
-    t.setAttribute('value',value);
-    t.setAttribute('position',position);
-    t.setAttribute('width',width);
-    t.setAttribute('color',color);
-    t.setAttribute('scale',scale+' '+scale+' '+scale);
-    t.setAttribute('wrap-count','34');
-    panel.appendChild(t);
-  }
-
-  text('vrTitle','','-.72 .36 .02',1.4,'#fff',.78);
-  text('vrDesc','','-.72 .12 .02',.78,'#dce9df',.60);
-
-  const img=document.createElement('a-image');
-  img.id='vrPhoto';
-  img.setAttribute('position','.48 .03 .02');
-  img.setAttribute('width','.38');
-  img.setAttribute('height','.52');
-  panel.appendChild(img);
-
-  text('vrRule','','-.72 -.23 .02',1.45,'#e5c98e',.53);
-
-  for(const item of [['CORTAR','cortar',-.36],['DEJAR','dejar',.36]]){
-    const b=document.createElement('a-plane');
-    b.classList.add('vrAnswer');
-    b.dataset.choice=item[1];
-    b.setAttribute('position',item[2]+' -.37 .03');
-    b.setAttribute('width','.60');
-    b.setAttribute('height','.18');
-    b.setAttribute('color','#d8f1e3');
-    b.setAttribute('material','shader:flat');
-    panel.appendChild(b);
-
-    const t=document.createElement('a-text');
-    t.setAttribute('value',item[0]);
-    t.setAttribute('position',(item[2]-.19)+' -.385 .04');
-    t.setAttribute('width','.42');
-    t.setAttribute('color','#173b2d');
-    t.setAttribute('scale','.58 .58 .58');
-    panel.appendChild(t);
-  }
-
-  const next=document.createElement('a-plane');
-  next.id='vrNext';
-  next.classList.add('vrAnswer');
-  next.dataset.choice='next';
-  next.setAttribute('position','0 -.37 .03');
-  next.setAttribute('width','.68');
-  next.setAttribute('height','.19');
-  next.setAttribute('color','#d8f1e3');
-  next.setAttribute('material','shader:flat');
-  next.setAttribute('visible','false');
-  panel.appendChild(next);
-
-  const nextText=document.createElement('a-text');
-  nextText.setAttribute('value','CONTINUAR');
-  nextText.setAttribute('position','-.19 -.385 .04');
-  nextText.setAttribute('width','.4');
-  nextText.setAttribute('color','#173b2d');
-  nextText.setAttribute('scale','.58 .58 .58');
-  nextText.setAttribute('visible','false');
-  panel.appendChild(nextText);
-
-  const restart=document.createElement('a-plane');
-  restart.id='vrRestart';
-  restart.classList.add('vrAnswer');
-  restart.dataset.choice='restart';
-  restart.setAttribute('position','0 -.37 .03');
-  restart.setAttribute('width','.68');
-  restart.setAttribute('height','.19');
-  restart.setAttribute('color','#d8f1e3');
-  restart.setAttribute('material','shader:flat');
-  restart.setAttribute('visible','false');
-  panel.appendChild(restart);
-
-  const restartText=document.createElement('a-text');
-  restartText.setAttribute('value','REINICIAR');
-  restartText.setAttribute('position','-.19 -.385 .04');
-  restartText.setAttribute('width','.4');
-  restartText.setAttribute('color','#173b2d');
-  restartText.setAttribute('scale','.58 .58 .58');
-  restartText.setAttribute('visible','false');
-  panel.appendChild(restartText);
-
-  for(const ray of document.querySelectorAll('[raycaster]')){
-    ray.setAttribute('raycaster','objects:.flower,.vrAnswer; far:7');
+// Rosales decorativos a ambos lados del pasillo.
+for(const x of [-2.7,2.7]) {
+  for(let z=-1;z>=-10;z-=1.45) {
+    makePlant(x,z,1,null,null);
   }
 }
 
-function showVRCase(id){
-  createVRPanel();
-  const row=getRose(id);
-  const c=getCase(id);
-  document.querySelector('#vrTitle').setAttribute('value',c.stage);
-  document.querySelector('#vrDesc').setAttribute('value',c.desc);
-  document.querySelector('#vrRule').setAttribute('value',c.rule);
-  document.querySelector('#vrPhoto').setAttribute('src',ghtAsset+photos[id]);
-  document.querySelector('#trainingPanel').setAttribute('visible',true);
-  document.querySelector('#vrNext').setAttribute('visible',false);
-  document.querySelector('#vrRestart').setAttribute('visible',false);
-  document.querySelectorAll('.vrAnswer[data-choice="cortar"],.vrAnswer[data-choice="dejar"]').forEach(e=>e.setAttribute('visible',true));
+// Nueve flores objetivo: tres inmaduras, tres óptimas y tres sobreabiertas.
+roseDefs.forEach(([x,z,stage,id,photo])=>makePlant(x,z,stage,id,photo));
+
+function updateHUD() {
+  document.querySelector('#count').textContent=resolved.size+' / '+roseDefs.length;
+  document.querySelector('#points').textContent=score;
+  document.querySelector('#bar').style.width=(resolved.size/roseDefs.length*100)+'%';
+  document.querySelector('#subline').textContent=
+    resolved.size+' respuestas · '+score+' aciertos';
+  if(resolved.size>=roseDefs.length) {
+    document.querySelector('#mission').textContent='Práctica completada. Revisa el resultado.';
+  }
 }
 
-function selectFlower(id){
-  if(!started)return;
-  if(resolved.has(id))return;
-  selected=id;
-  const c=getCase(id);
-  if(isVR()){
-    showVRCase(id);
+function selectFlower(id) {
+  if(!started || resolved.has(id)) return;
+  selectedId=id;
+  const row=roseDefs.find(item=>item[3]===id);
+  if(!row) return;
+  const stage=stages[row[2]];
+
+  if(scene.is('vr-mode')) {
+    document.querySelector('#vrHeading').setAttribute('value','EJERCICIO GHT · '+(resolved.size+1)+' DE 9');
+    document.querySelector('#vrTitle').setAttribute('value',stage.name);
+    document.querySelector('#vrDesc').setAttribute('value',stage.desc);
+    document.querySelector('#vrRule').setAttribute('value',stage.rule);
+    document.querySelector('#vrPhoto').setAttribute('src',assetPath+row[4]);
+    document.querySelector('#vrCut').setAttribute('visible',true);
+    document.querySelector('#vrLeave').setAttribute('visible',true);
+    document.querySelector('#vrNext').setAttribute('visible',false);
+    document.querySelector('#vrNextLabel').setAttribute('visible',false);
+    document.querySelector('#vrRestart').setAttribute('visible',false);
+    document.querySelector('#vrPanel').setAttribute('visible',true);
     return;
   }
 
-  document.querySelector('#flowerTitle').textContent=c.stage;
-  document.querySelector('#flowerDesc').textContent=c.desc;
-  document.querySelector('#flowerRule').textContent=c.rule;
-  document.querySelector('#photoReference').src=ghtAsset+photos[id];
-
-  const ans=document.querySelector('#answers');
-  ans.innerHTML='';
-  [['✂ Cortar','cortar'],['Dejar la flor','dejar']].forEach(([label,val])=>{
-    const b=document.createElement('button');
-    b.textContent=label;
-    b.className=val==='cortar'?'primary':'secondary';
-    b.onclick=()=>answer(id,val);
-    ans.appendChild(b);
+  document.querySelector('#round').textContent=(resolved.size+1)+' de 9';
+  document.querySelector('#flowerTitle').textContent=stage.name;
+  document.querySelector('#flowerDesc').textContent=stage.desc;
+  document.querySelector('#flowerRule').textContent=stage.rule;
+  document.querySelector('#photo').src=assetPath+row[4];
+  document.querySelector('#answerButtons').innerHTML=
+    '<button class="btn primary" data-answer="cortar">✂ Cortar</button>'+
+    '<button class="btn secondary" data-answer="dejar" style="color:#153d2d;border-color:#153d2d33">Dejar</button>';
+  document.querySelectorAll('#answerButtons [data-answer]').forEach(button=>{
+    button.addEventListener('click',()=>answer(id,button.dataset.answer));
   });
   document.querySelector('#card').style.display='block';
 }
 
-function answer(id,value){
-  if(!id||resolved.has(id))return;
-  const row=getRose(id);
-  const c=getCase(id);
-  const correct=value===c.decision;
+function cutFlower(id) {
+  const head=flowers.get(id);
+  if(!head) return;
+  head.setAttribute(
+    'animation__drop',
+    'property:position; to:0 -0.3 0; dur:320; easing:easeInQuad'
+  );
+  head.setAttribute(
+    'animation__shrink',
+    'property:scale; to:.02 .02 .02; dur:260; delay:320; easing:easeInQuad'
+  );
+}
+
+function answer(id,value) {
+  if(!id || resolved.has(id)) return;
+  const row=roseDefs.find(item=>item[3]===id);
+  const stage=stages[row[2]];
+  const correct=value===stage.decision;
   resolved.add(id);
-  if(correct)score++;
+  if(correct) score++;
+  if(value==='cortar') cutFlower(id);
   updateHUD();
 
-  const flower=roseNodes[id];
-  if(value==='cortar'&&flower){
-    flower.setAttribute('animation__cutdrop','property:position; to:0 -0.28 0; dur:320; easing:easeInQuad');
-    flower.setAttribute('animation__cutfade','property:scale; to:.02 .02 .02; dur:260; delay:320; easing:easeInQuad');
-  }
+  const feedback=(correct?'✓ Correcto. ':'✕ Revisa. ')+stage.feedback;
 
-  const feedback=(correct?'✓ Correcto. ':'✕ Revisa el criterio. ')+c.feedback;
-
-  if(isVR()){
+  if(scene.is('vr-mode')) {
     document.querySelector('#vrDesc').setAttribute('value',feedback);
-    document.querySelector('#vrRule').setAttribute('value',c.rule);
-    document.querySelectorAll('.vrAnswer[data-choice="cortar"],.vrAnswer[data-choice="dejar"]').forEach(e=>e.setAttribute('visible',false));
+    document.querySelector('#vrRule').setAttribute('value',stage.rule);
+    document.querySelector('#vrCut').setAttribute('visible',false);
+    document.querySelector('#vrLeave').setAttribute('visible',false);
     document.querySelector('#vrNext').setAttribute('visible',true);
-    document.querySelectorAll('#trainingPanel a-text').forEach(e=>{
-      if(e.getAttribute('value')==='CONTINUAR')e.setAttribute('visible',true);
-    });
+    document.querySelector('#vrNextLabel').setAttribute('visible',true);
     return;
   }
 
   document.querySelector('#flowerDesc').textContent=feedback;
-  document.querySelector('#flowerRule').textContent=c.rule;
-  const ans=document.querySelector('#answers');
-  ans.innerHTML='';
-  const next=document.createElement('button');
-  next.className='primary';
-  next.textContent='Continuar';
-  next.onclick=()=>{
+  document.querySelector('#flowerRule').textContent=stage.rule;
+  document.querySelector('#answerButtons').innerHTML=
+    '<button class="btn primary" id="continueButton">Continuar</button>';
+  document.querySelector('#continueButton').addEventListener('click',()=>{
     document.querySelector('#card').style.display='none';
-    if(resolved.size>=roseDefs.length)finish();
-  };
-  ans.appendChild(next);
+    if(resolved.size>=roseDefs.length) finish();
+  });
 }
 
-function finish(){
-  const pct=Math.round(score/roseDefs.length*100);
+function finish() {
+  const percentage=Math.round(score/roseDefs.length*100);
   document.querySelector('#mission').textContent='Entrenamiento finalizado';
-  document.querySelector('#flowerTitle').textContent='Resultado: '+score+' de '+roseDefs.length;
-  document.querySelector('#flowerDesc').textContent=
-    pct===100?'Excelente reconocimiento de los casos de práctica.':'Revisa la retroalimentación y vuelve a practicar.';
-  document.querySelector('#flowerRule').textContent=
-    'Punto 3: criterio escrito GHT. Sobreabierta: umbral exacto pendiente de validación.';
-  document.querySelector('#answers').innerHTML='';
-  const again=document.createElement('button');
-  again.className='primary';
-  again.textContent='Volver a practicar';
-  again.onclick=reset;
-  document.querySelector('#answers').appendChild(again);
-  document.querySelector('#card').style.display='block';
+  document.querySelector('#subline').textContent='Resultado: '+score+' de 9 · '+percentage+'%';
 
-  if(isVR()){
-    createVRPanel();
-    document.querySelector('#vrTitle').setAttribute('value','Resultado: '+score+' / '+roseDefs.length);
-    document.querySelector('#vrDesc').setAttribute('value','Entrenamiento terminado. Contrasta tus decisiones con la guía técnica de GHT.');
-    document.querySelector('#vrRule').setAttribute('value','Sobreabierta: el umbral exacto requiere validación agronómica.');
-    document.querySelectorAll('.vrAnswer').forEach(e=>e.setAttribute('visible',false));
+  if(scene.is('vr-mode')) {
+    document.querySelector('#vrHeading').setAttribute('value','RESULTADO FINAL');
+    document.querySelector('#vrTitle').setAttribute('value',score+' respuestas correctas de 9');
+    document.querySelector('#vrDesc').setAttribute('value',
+      percentage===100?'Excelente reconocimiento de los casos de práctica.':'Revisa las pistas y vuelve a practicar.');
+    document.querySelector('#vrRule').setAttribute('value',
+      'El umbral de sobreapertura requiere validación agronómica de GHT.');
+    document.querySelector('#vrCut').setAttribute('visible',false);
+    document.querySelector('#vrLeave').setAttribute('visible',false);
+    document.querySelector('#vrNext').setAttribute('visible',false);
+    document.querySelector('#vrNextLabel').setAttribute('visible',false);
     document.querySelector('#vrRestart').setAttribute('visible',true);
-    document.querySelectorAll('#trainingPanel a-text').forEach(e=>{
-      if(e.getAttribute('value')==='REINICIAR')e.setAttribute('visible',true);
-    });
-    document.querySelector('#trainingPanel').setAttribute('visible',true);
+    document.querySelector('#vrRestartLabel').setAttribute('visible',true);
+    document.querySelector('#vrPanel').setAttribute('visible',true);
+    return;
   }
+
+  document.querySelector('#flowerTitle').textContent='Resultado: '+score+' de 9';
+  document.querySelector('#flowerDesc').textContent=
+    percentage===100?'Excelente reconocimiento de los casos de práctica.':'Revisa la retroalimentación y vuelve a practicar.';
+  document.querySelector('#flowerRule').textContent=
+    'El punto 3 es el criterio escrito de corte. El umbral de sobreapertura debe validarse con GHT.';
+  document.querySelector('#answerButtons').innerHTML=
+    '<button class="btn primary" id="againButton">Volver a practicar</button>';
+  document.querySelector('#againButton').addEventListener('click',reset);
+  document.querySelector('#card').style.display='block';
 }
 
-function reset(){
+function reset() {
   resolved.clear();
   score=0;
-  selected=null;
+  selectedId=null;
   started=true;
+  flowers.forEach((flower,id)=>{
+    flower.setAttribute('animation__drop','');
+    flower.setAttribute('animation__shrink','');
+    const def=roseDefs.find(item=>item[3]===id);
+    flower.setAttribute('position','0 '+(1.8+Math.sin(def[0]+def[1])*.08)+' 0');
+    flower.setAttribute('scale','1 1 1');
+  });
   document.querySelector('#card').style.display='none';
-  const panel=document.querySelector('#trainingPanel');
-  if(panel)panel.setAttribute('visible',false);
-  document.querySelector('#intro').style.display='none';
+  document.querySelector('#vrPanel').setAttribute('visible',false);
   updateHUD();
 }
 
-document.querySelector('#begin').onclick=()=>{
+function chooseVRAnswer(choice) {
+  if(choice==='cortar' || choice==='dejar') {
+    answer(selectedId,choice);
+  } else if(choice==='next') {
+    document.querySelector('#vrPanel').setAttribute('visible',false);
+    if(resolved.size>=roseDefs.length) finish();
+  } else if(choice==='restart') {
+    reset();
+  }
+}
+
+document.querySelector('#begin').addEventListener('click',()=>{
   started=true;
   document.querySelector('#intro').style.display='none';
-};
-document.querySelector('#startVR').onclick=()=>{
-  if(!started){
-    started=true;
-    document.querySelector('#intro').style.display='none';
-  }
+});
+document.querySelector('#beginVR').addEventListener('click',()=>{
+  started=true;
+  document.querySelector('#intro').style.display='none';
   scene.enterVR();
-};
-document.querySelector('#reset').onclick=reset;
-document.querySelector('#closeCard').onclick=()=>document.querySelector('#card').style.display='none';
-document.querySelector('#showGallery').onclick=()=>document.querySelector('#caseGallery').style.display='grid';
-document.querySelector('#closeGallery').onclick=()=>document.querySelector('#caseGallery').style.display='none';
-
-const galleryFiles=['12','26','41','42','45','53','59','63'];
-const gallery=document.querySelector('#caseGalleryGrid');
-galleryFiles.forEach(n=>{
-  const fig=document.createElement('figure');
-  fig.innerHTML='<img src="'+ghtAsset+'04_Casos_Dificiles_Ruido_'+n+'.jpeg" alt="Caso difícil '+n+'"><figcaption>Caso difícil · '+n+' · observación</figcaption>';
-  gallery.appendChild(fig);
+});
+document.querySelector('#enterVR').addEventListener('click',()=>{
+  started=true;
+  document.querySelector('#intro').style.display='none';
+  scene.enterVR();
+});
+document.querySelector('#reset').addEventListener('click',reset);
+document.querySelector('#openGallery').addEventListener('click',()=>{
+  document.querySelector('#gallery').style.display='grid';
+});
+document.querySelector('#closeGallery').addEventListener('click',()=>{
+  document.querySelector('#gallery').style.display='none';
 });
 
-document.querySelectorAll('[laser-controls]').forEach(hand=>{
-  hand.addEventListener('triggerdown',()=>{
-    const hit=hand.components.raycaster&&hand.components.raycaster.intersectedEls[0];
-    if(!hit)return;
+const difficultPhotos=['12','26','41','42','45','53','59','63'];
+const gallery=document.querySelector('#galleryGrid');
+difficultPhotos.forEach(number=>{
+  const figure=document.createElement('figure');
+  figure.innerHTML=
+    '<img src="'+assetPath+'04_Casos_Dificiles_Ruido_'+number+'.jpeg" alt="Caso difícil GHT">'+
+    '<figcaption>Caso difícil · '+number+' · observación</figcaption>';
+  gallery.appendChild(figure);
+});
+
+document.querySelectorAll('[laser-controls]').forEach(controller=>{
+  controller.addEventListener('triggerdown',()=>{
+    const hit=controller.components.raycaster?.intersectedEls?.[0];
+    if(!hit) return;
 
     const flower=hit.closest('.flower');
-    if(flower&&flower.dataset.id){
+    if(flower && flower.dataset.id) {
       selectFlower(flower.dataset.id);
       return;
     }
 
-    const button=hit.closest('.vrAnswer');
-    if(!button)return;
-
-    if(button.dataset.choice==='cortar')answer(selected,'cortar');
-    if(button.dataset.choice==='dejar')answer(selected,'dejar');
-    if(button.dataset.choice==='next'){
-      document.querySelector('#trainingPanel').setAttribute('visible',false);
-      if(resolved.size>=roseDefs.length)finish();
-    }
-    if(button.dataset.choice==='restart')reset();
+    const button=hit.closest('.ui-hit');
+    if(button) chooseVRAnswer(button.dataset.choice);
   });
 });
 
-// Joystick izquierdo: caminar. Joystick derecho: giro suave.
-AFRAME.registerComponent('quest-thumbstick-move',{
-  init:function(){
-    this.moveAxis={x:0,y:0};
-    this.turnAxis={x:0,y:0};
+document.querySelectorAll('.ui-hit').forEach(button=>{
+  button.addEventListener('click',()=>chooseVRAnswer(button.dataset.choice));
+});
 
-    document.querySelector('#leftHand').addEventListener('thumbstickmoved',e=>{
-      this.moveAxis=e.detail||{x:0,y:0};
+// Thumbstick izquierdo: desplazamiento relativo a la mirada.
+// Thumbstick derecho: giro suave de la orientación del jugador.
+AFRAME.registerComponent('quest-thumbstick-move',{
+  init:function() {
+    this.leftAxis={x:0,y:0};
+    this.rightAxis={x:0,y:0};
+
+    document.querySelector('#leftController').addEventListener('thumbstickmoved',event=>{
+      this.leftAxis=event.detail || {x:0,y:0};
     });
-    document.querySelector('#rightHand').addEventListener('thumbstickmoved',e=>{
-      this.turnAxis=e.detail||{x:0,y:0};
+    document.querySelector('#rightController').addEventListener('thumbstickmoved',event=>{
+      this.rightAxis=event.detail || {x:0,y:0};
     });
   },
-  tick:function(time,dt){
-    if(!this.el.sceneEl.is('vr-mode')||!dt)return;
 
-    const delta=Math.min(dt,40)/1000;
+  tick:function(time,deltaMs) {
+    if(!this.el.sceneEl.is('vr-mode') || !deltaMs) return;
+
+    const dt=Math.min(deltaMs,40)/1000;
     const deadZone=.16;
-    const forward=new THREE.Vector3();
-    document.querySelector('#camera').object3D.getWorldDirection(forward);
-    forward.y=0;
-    forward.normalize();
+    const cameraDirection=new THREE.Vector3();
+    camera.object3D.getWorldDirection(cameraDirection);
+    cameraDirection.y=0;
+    cameraDirection.normalize();
 
-    const right=new THREE.Vector3(-forward.z,0,forward.x);
-    const x=Math.abs(this.moveAxis.x)>deadZone?this.moveAxis.x:0;
-    const y=Math.abs(this.moveAxis.y)>deadZone?this.moveAxis.y:0;
-    const turn=Math.abs(this.turnAxis.x)>deadZone?this.turnAxis.x:0;
+    const rightDirection=new THREE.Vector3(
+      -cameraDirection.z,0,cameraDirection.x
+    );
 
-    this.el.object3D.rotation.y-=turn*1.35*delta;
-    this.el.object3D.position.addScaledVector(right,x*2.1*delta);
-    this.el.object3D.position.addScaledVector(forward,-y*2.1*delta);
+    const moveX=Math.abs(this.leftAxis.x)>deadZone ? this.leftAxis.x : 0;
+    const moveY=Math.abs(this.leftAxis.y)>deadZone ? this.leftAxis.y : 0;
+    const turnX=Math.abs(this.rightAxis.x)>deadZone ? this.rightAxis.x : 0;
 
-    this.el.object3D.position.x=THREE.MathUtils.clamp(this.el.object3D.position.x,-7,7);
-    this.el.object3D.position.z=THREE.MathUtils.clamp(this.el.object3D.position.z,-12,10);
+    // El usuario empuja hacia delante con Y negativo.
+    this.el.object3D.position.addScaledVector(rightDirection,moveX*2.0*dt);
+    this.el.object3D.position.addScaledVector(cameraDirection,-moveY*2.0*dt);
+
+    // Al empujar el joystick derecho a la derecha, gira a la derecha.
+    this.el.object3D.rotation.y-=turnX*1.35*dt;
+
+    // Límites del pasillo para mantener al jugador dentro del invernadero.
+    this.el.object3D.position.x=THREE.MathUtils.clamp(
+      this.el.object3D.position.x,-4.7,4.7
+    );
+    this.el.object3D.position.z=THREE.MathUtils.clamp(
+      this.el.object3D.position.z,-10.5,4
+    );
   }
 });
-document.querySelector('#cameraRig').setAttribute('quest-thumbstick-move','');
+rig.setAttribute('quest-thumbstick-move','');
 
 scene.addEventListener('enter-vr',()=>{
-  document.querySelector('#hint').textContent='Joystick izquierdo: caminar · derecho: girar · gatillo: seleccionar';
+  document.querySelector('#hint').textContent=
+    'Joystick izquierdo: caminar · joystick derecho: girar · gatillo: seleccionar';
 });
 scene.addEventListener('exit-vr',()=>{
-  document.querySelector('#hint').textContent='Mira una flor y pulsa el gatillo · WASD para caminar';
+  document.querySelector('#hint').textContent=
+    'WASD para caminar · apunta a una flor y pulsa el gatillo';
 });
-
-document.addEventListener('keydown',e=>{
-  if(e.key==='Escape'){
+document.addEventListener('keydown',event=>{
+  if(event.key==='Escape') {
+    document.querySelector('#gallery').style.display='none';
     document.querySelector('#card').style.display='none';
-    document.querySelector('#caseGallery').style.display='none';
   }
 });
 
